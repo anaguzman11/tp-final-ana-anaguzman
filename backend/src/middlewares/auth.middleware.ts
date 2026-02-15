@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-// ✅ CAMBIO AQUÍ: Ahora los traemos desde la carpeta types
 import { JwtPayload, UserRole } from '../types/auth';
 
 if (!process.env.JWT_SECRET) {
@@ -33,7 +32,6 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
   });
 };
 
-// Middleware para verificar roles específicos
 export const authorize = (requiredRole: UserRole) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = (req as any).user as JwtPayload;
