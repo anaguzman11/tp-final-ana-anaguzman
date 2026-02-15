@@ -1,0 +1,479 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Auth & Pets
+meta:
+  id: wrk_52a3cf121e834abb995ec965c2783521
+  created: 1769924261020
+  modified: 1769924261020
+  description: ""
+collection:
+  - url: http://localhost:3000/api/auth/register
+    name: REGISTER - ANA
+    meta:
+      id: req_99e53282a0984f41b46aa98f8e4b3523
+      created: 1769924320445
+      modified: 1770173180575
+      isPrivate: false
+      description: ""
+      sortKey: -1769924320445
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "Ana Guzman",
+          "email": "aguzica@gmail.com",
+          "password": "contraseña123"
+         }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/register
+    name: ADMIN
+    meta:
+      id: req_1a9cb3b6893e427598f3a80fdddef825
+      created: 1769925011029
+      modified: 1770173512470
+      isPrivate: false
+      description: ""
+      sortKey: -1769925011029
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "Ariel",
+          "email": "admin@example.com",
+          "password": "supersecretpassword",
+          "role": "admin"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5N2VlN2RiOWQyMTQzOWNiNjNlOTUwMiIsIm5hbWUiOiJBbmEgR3V6bWFuIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTc2OTkyNDg1MywiZXhwIjoxNzcwMDExMjUzLCJpc3MiOiJwYXRpdGFzLWZlbGljZXMtYXBpIn0.LueGPQfyouINJlOmFRb619XozkX3hgtaUhEbmuZPO3c
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/register
+    name: REGISTER - Cliente
+    meta:
+      id: req_66b9685362a64dbe913fad5cf3035a15
+      created: 1770155967880
+      modified: 1770169111714
+      isPrivate: false
+      description: ""
+      sortKey: -1770155967880
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "patricia icazati",
+          "email": "patrilau@gmail.com",
+          "password": "contraseña123"
+         }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/register
+    name: REGISTER - Cliente VILMA
+    meta:
+      id: req_58c0af7f035e4384b296842cbe488ed5
+      created: 1770158050972
+      modified: 1770171324629
+      isPrivate: false
+      description: ""
+      sortKey: -1770158050972
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "vilma guzman",
+          "email": "vilma_11@hotmail.com",
+          "password": "contraseña123"
+         }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/register
+    name: REGISTER - Veterinario
+    meta:
+      id: req_aa947aa8b94f43b6a8fe3010d01d05fa
+      created: 1770158754721
+      modified: 1770169063917
+      isPrivate: false
+      description: ""
+      sortKey: -1770158754721
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "laura lopez",
+          "email": "ayudandopatitas@gmail.com",
+          "password": "contraseña123",
+        "role": "veterinarian"
+         }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/register
+    name: REGISTER - Camila
+    meta:
+      id: req_aef57c89f60449dc81ea21ffef7dd46e
+      created: 1770167792464
+      modified: 1770169044406
+      isPrivate: false
+      description: ""
+      sortKey: -1770167792464
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "camila guzman",
+          "email": "cabeguzica@gmail.com",
+          "password": "contraseña123"
+         }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/login
+    name: LOGIN - Token - Camila
+    meta:
+      id: req_624cf5ddbb424e959636ad5e33b5ce5b
+      created: 1770168717477
+      modified: 1770169020519
+      isPrivate: false
+      description: ""
+      sortKey: -1770168717477
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+           "email": "cabeguzica@gmail.com",
+          "password": "contraseña123"
+         }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/pets/register
+    name: REGISTER - MASCOTA - GOYO
+    meta:
+      id: req_359b597aab074d21817d451014df46f7
+      created: 1770169281712
+      modified: 1770175087253
+      isPrivate: false
+      description: ""
+      sortKey: -1770169281712
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "Goyo",
+          "species": "Dog",
+          "breed": "Yorkshire",
+          "age": 10,
+        "owner": "Camila Guzman"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      disabled: false
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ODI5ZTE0ZWRjMWQxZTBiOTFiZjNhNiIsIm5hbWUiOiJjYW1pbGEgZ3V6bWFuIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTc3MDE2ODc2NywiZXhwIjoxNzcwMjU1MTY3LCJpc3MiOiJwYXRpdGFzLWZlbGljZXMtYXBpIn0.l9wRk6rKE4altaoI1ArywURZgZNR0Pw38sUa7_dB_0I
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/update/6982a2f4edc1d1e0b91bf3a9
+    name: CAMBIO - CLIENTE VILMA
+    meta:
+      id: req_2396dc620d4a4e1d82d688572dac7400
+      created: 1770170532079
+      modified: 1770172350659
+      isPrivate: false
+      description: ""
+      sortKey: -1770170532079
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        "name": "Belen Icazati",
+        "email": "belu@hotmail.com"}
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ODJhMmY0ZWRjMWQxZTBiOTFiZjNhOSIsIm5hbWUiOiJ2aWxtYSBndXptYW4iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNzcwMTcwODEyLCJleHAiOjE3NzAyNTcyMTIsImlzcyI6InBhdGl0YXMtZmVsaWNlcy1hcGkifQ.aqMUsvWcHZhvPsX6tpBHmUvbCZx1uh8Q-1NGiRXwunU
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/login
+    name: TOKEN - VILMA
+    meta:
+      id: req_0fcf6a9dd6044279b8d2184dfe7e9054
+      created: 1770170628435
+      modified: 1770171388108
+      isPrivate: false
+      description: ""
+      sortKey: -1770170628435
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        "email": "vilma_11@hotmail.com",
+        "password": "contraseña123"
+
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/login
+    name: TOKEN - ADMIN
+    meta:
+      id: req_2e553fc620ed48009549fbbd898a92d0
+      created: 1770171234335
+      modified: 1770171273849
+      isPrivate: false
+      description: ""
+      sortKey: -1770171234335
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "Ariel",
+          "email": "admin@example.com",
+          "password": "supersecretpassword",
+          "role": "admin"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/delete/6982b234bb0ccbf84d762593
+    name: ELIMINACION DE CLIENTE - ANA
+    meta:
+      id: req_64c1b57726d6400aa1b8027671e4b62e
+      created: 1770172916021
+      modified: 1770173531064
+      isPrivate: false
+      description: ""
+      sortKey: -1770172916021
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ODJhYjU3MmYwYzdlNzhkZjc1YjQzMCIsIm5hbWUiOiJBcmllbCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MDE3MTI4MiwiZXhwIjoxNzcwMjU3NjgyLCJpc3MiOiJwYXRpdGFzLWZlbGljZXMtYXBpIn0.InrZwwSdSw8VUL7HSi8M0oejtfH5b6nmUXrqnTYrfqs
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/auth/login
+    name: LOGIN - ANA
+    meta:
+      id: req_795edf2046e2420d88bbe70ff0136148
+      created: 1770173427951
+      modified: 1770173468313
+      isPrivate: false
+      description: ""
+      sortKey: -1770173427951
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        "email": "aguzica@gmail.com",
+        "password": "contraseña123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/pets/6982a4f6edc1d1e0b91bf3ab
+    name: LISTAR MASCOTA
+    meta:
+      id: req_4922caba41b64e9cb6057f1d14355827
+      created: 1770174699360
+      modified: 1770175117684
+      isPrivate: false
+      description: ""
+      sortKey: -1770174699360
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ODI5ZTE0ZWRjMWQxZTBiOTFiZjNhNiIsIm5hbWUiOiJjYW1pbGEgZ3V6bWFuIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTc3MDE2ODc2NywiZXhwIjoxNzcwMjU1MTY3LCJpc3MiOiJwYXRpdGFzLWZlbGljZXMtYXBpIn0.l9wRk6rKE4altaoI1ArywURZgZNR0Pw38sUa7_dB_0I
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_31fa5911d480374fc61567c3c1c73a2e3edf10c1
+    created: 1769924261043
+    modified: 1769924261043
+environments:
+  name: Base Environment
+  meta:
+    id: env_31fa5911d480374fc61567c3c1c73a2e3edf10c1
+    created: 1769924261032
+    modified: 1769924261032
+    isPrivate: false
