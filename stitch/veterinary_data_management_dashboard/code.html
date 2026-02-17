@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ayudando Patitas - Veterinary Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#14b8a6",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        display: ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                    },
+                },
+            },
+        };
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .scroll-mt-header {
+            scroll-margin-top: 2rem;
+        }::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-200">
+<aside class="fixed left-0 top-0 h-full w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 z-30 hidden lg:block">
+<div class="p-6">
+<div class="flex items-center gap-3 text-primary mb-10">
+<span class="material-icons-round text-3xl">pets</span>
+<h1 class="font-bold text-xl tracking-tight">Ayudando Patitas</h1>
+</div>
+<nav class="space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-primary dark:hover:text-primary rounded-xl transition-all group" href="#dueños">
+<span class="material-icons-round">person</span>
+<span class="font-medium">Dueños</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-primary dark:hover:text-primary rounded-xl transition-all group" href="#mascotas">
+<span class="material-icons-round">auto_stories</span>
+<span class="font-medium">Mascotas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-primary dark:hover:text-primary rounded-xl transition-all group" href="#historial">
+<span class="material-icons-round">history_edu</span>
+<span class="font-medium">Historial Clínico</span>
+</a>
+</nav>
+</div>
+<div class="absolute bottom-6 left-6 right-6">
+<button class="flex items-center justify-between w-full px-4 py-3 bg-slate-100 dark:bg-slate-900 rounded-xl hover:opacity-80 transition-opacity" onclick="toggleDarkMode()">
+<span class="text-sm font-medium">Cambiar Tema</span>
+<span class="material-icons-round text-xl dark:hidden">dark_mode</span>
+<span class="material-icons-round text-xl hidden dark:block">light_mode</span>
+</button>
+</div>
+</aside>
+<main class="lg:ml-64 p-4 lg:p-8 space-y-12">
+<header class="flex items-center justify-between lg:hidden mb-8">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-icons-round text-2xl">pets</span>
+<h1 class="font-bold text-lg">Ayudando Patitas</h1>
+</div>
+<button class="p-2 bg-slate-100 dark:bg-slate-800 rounded-full" onclick="toggleDarkMode()">
+<span class="material-icons-round dark:hidden">dark_mode</span>
+<span class="material-icons-round hidden dark:block">light_mode</span>
+</button>
+</header>
+<section class="scroll-mt-header" id="dueños">
+<div class="flex items-center gap-4 mb-6">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-icons-round text-primary">person</span>
+</div>
+<h2 class="text-2xl font-bold">Gestión de Dueños</h2>
+</div>
+<div class="grid grid-cols-1 gap-8">
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-6">Nuevo Registro de Dueño</h3>
+<form class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div>
+<label class="block text-sm font-medium mb-2">Nombre Completo</label>
+<input class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary" placeholder="Ej: Juan Pérez" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-2">Email</label>
+<input class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary" placeholder="juan@correo.com" type="email"/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-2">Teléfono</label>
+<input class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary" placeholder="+56 9..." type="tel"/>
+</div>
+<div class="md:col-span-3 flex justify-end">
+<button class="bg-primary text-white px-6 py-2.5 rounded-xl font-semibold hover:opacity-90 transition-opacity flex items-center gap-2" type="submit">
+<span class="material-icons-round text-sm">add</span>
+                                Registrar Dueño
+                            </button>
+</div>
+</form>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-700">
+<h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500">Listado de Dueños</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-900/50">
+<tr>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Nombre</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Email</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Teléfono</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+<tr>
+<td class="px-6 py-4 font-medium">Carlos Ruiz</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">carlos.ruiz@gmail.com</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">+56 9 1234 5678</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-colors">
+<span class="material-icons-round text-sm">edit</span>
+</button>
+<button class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
+<span class="material-icons-round text-sm">delete</span>
+</button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 font-medium">Ana María López</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">ana.lopez@outlook.com</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">+56 9 8765 4321</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-colors">
+<span class="material-icons-round text-sm">edit</span>
+</button>
+<button class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
+<span class="material-icons-round text-sm">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section class="scroll-mt-header" id="mascotas">
+<div class="flex items-center gap-4 mb-6">
+<div class="p-2 bg-amber-100 dark:bg-amber-500/10 rounded-lg">
+<span class="material-icons-round text-amber-600 dark:text-amber-500">pets</span>
+</div>
+<h2 class="text-2xl font-bold">Gestión de Mascotas</h2>
+</div>
+<div class="grid grid-cols-1 gap-8">
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-6">Registrar Nueva Mascota</h3>
+<form class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div>
+<label class="block text-sm font-medium mb-2">Nombre Mascota</label>
+<input class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary" placeholder="Ej: Firulais" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-2">Especie</label>
+<select class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary">
+<option>Canino</option>
+<option>Felino</option>
+<option>Exótico</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium mb-2">Raza</label>
+<input class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary" placeholder="Ej: Labrador" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-2">Dueño Responsable</label>
+<select class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary">
+<option>Carlos Ruiz</option>
+<option>Ana María López</option>
+</select>
+</div>
+<div class="md:col-span-4 flex justify-end">
+<button class="bg-primary text-white px-6 py-2.5 rounded-xl font-semibold hover:opacity-90 transition-opacity flex items-center gap-2" type="submit">
+<span class="material-icons-round text-sm">add</span>
+                                Registrar Mascota
+                            </button>
+</div>
+</form>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-700">
+<h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500">Listado de Mascotas</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-900/50">
+<tr>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Mascota</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Especie</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Raza</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Dueño</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+<tr>
+<td class="px-6 py-4 font-medium flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+<span class="material-icons-round text-lg text-slate-400">pets</span>
+</div>
+                                        Toby
+                                    </td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Canino</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Labrador</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Carlos Ruiz</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-colors">
+<span class="material-icons-round text-sm">edit</span>
+</button>
+<button class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
+<span class="material-icons-round text-sm">delete</span>
+</button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 font-medium flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+<span class="material-icons-round text-lg text-slate-400">pets</span>
+</div>
+                                        Luna
+                                    </td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Felino</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Siamés</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Ana María López</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-colors">
+<span class="material-icons-round text-sm">edit</span>
+</button>
+<button class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
+<span class="material-icons-round text-sm">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section class="scroll-mt-header pb-20" id="historial">
+<div class="flex items-center gap-4 mb-6">
+<div class="p-2 bg-indigo-100 dark:bg-indigo-500/10 rounded-lg">
+<span class="material-icons-round text-indigo-600 dark:text-indigo-500">history_edu</span>
+</div>
+<h2 class="text-2xl font-bold">Historial Clínico</h2>
+</div>
+<div class="grid grid-cols-1 gap-8">
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-6">Nueva Entrada Clínica</h3>
+<form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-medium mb-2">Mascota</label>
+<select class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary">
+<option>Toby (Carlos Ruiz)</option>
+<option>Luna (Ana María López)</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium mb-2">Motivo de Visita</label>
+<input class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary" placeholder="Ej: Control anual, Vacuna..." type="text"/>
+</div>
+<div class="md:col-span-2">
+<label class="block text-sm font-medium mb-2">Observaciones y Tratamiento</label>
+<textarea class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary" placeholder="Detalle el diagnóstico y pasos a seguir..." rows="3"></textarea>
+</div>
+<div class="md:col-span-2 flex justify-end">
+<button class="bg-primary text-white px-6 py-2.5 rounded-xl font-semibold hover:opacity-90 transition-opacity flex items-center gap-2" type="submit">
+<span class="material-icons-round text-sm">save</span>
+                                Guardar Entrada
+                            </button>
+</div>
+</form>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+<h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500">Registros Recientes</h3>
+<div class="relative w-64">
+<span class="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="pl-10 w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-primary focus:border-primary py-2" placeholder="Buscar por mascota..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-900/50">
+<tr>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Fecha</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Mascota</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Motivo</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Diagnóstico</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+<tr>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">12 Mayo, 2024</td>
+<td class="px-6 py-4 font-medium">Toby</td>
+<td class="px-6 py-4">Control Vacunación</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm italic">Vacuna antirrábica aplicada sin novedades.</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-icons-round text-sm">visibility</span>
+</button>
+<button class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
+<span class="material-icons-round text-sm">delete</span>
+</button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">10 Mayo, 2024</td>
+<td class="px-6 py-4 font-medium">Luna</td>
+<td class="px-6 py-4">Inapetencia</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm italic">Cambio de dieta sugerido, control en 1 semana.</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-icons-round text-sm">visibility</span>
+</button>
+<button class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
+<span class="material-icons-round text-sm">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex justify-around p-3 lg:hidden z-30">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#dueños">
+<span class="material-icons-round">person</span>
+<span class="text-[10px] font-semibold uppercase">Dueños</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#mascotas">
+<span class="material-icons-round">auto_stories</span>
+<span class="text-[10px] font-semibold uppercase">Mascotas</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#historial">
+<span class="material-icons-round">history_edu</span>
+<span class="text-[10px] font-semibold uppercase">Historial</span>
+</a>
+</nav>
+<script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+
+</body></html>

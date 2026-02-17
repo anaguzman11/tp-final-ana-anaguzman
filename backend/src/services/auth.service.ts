@@ -17,7 +17,7 @@ export const register = async (
   name: string,
   email: string,
   password: string,
-  role: UserRole = UserRole.CLIENT // ✅ Usamos el Enum para el valor por defecto
+  role: UserRole = UserRole.CLIENT // Enum para el valor por defecto
 ): Promise<string> => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -39,7 +39,6 @@ export const login = async (
   email: string,
   password: string,
 ): Promise<string> => {
-  // 🛡️ Tip: El error genérico aquí lo manejaremos en el controlador
   const user = await User.findOne({ email });
   if (!user) throw new Error("Usuario no encontrado");
 
@@ -49,7 +48,7 @@ export const login = async (
   const payload: JwtPayload = {
     id: user.id,
     name: user.name,
-    role: user.role as UserRole, // ✅ Casteo seguro al tipo centralizado
+    role: user.role as UserRole,
   };
 
   const options: SignOptions = {
