@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { register, login } from '../controllers/auth.controller';
+import { register, login, getAllClients } from '../controllers/auth.controller';
 import { updateUser } from '../controllers/auth.controller';
 import { authenticate, authorize } from '../middlewares/auth.middleware';
 import { deleteUser } from '../controllers/auth.controller';

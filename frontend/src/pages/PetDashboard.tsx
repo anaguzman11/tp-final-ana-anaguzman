@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
 import DashboardLayout from '../components/DashboardLayout';
+import PetHistoryModal from '../components/PetHistoryModal';
+import EditPetModal from '../components/EditPetModal';
 
 interface Pet {
     _id: string;
@@ -8,6 +10,12 @@ interface Pet {
     species: string;
     breed: string;
     age: number;
+    owner: { _id: string, name: string };
+}
+
+interface Owner {
+    _id: string;
+    name: string;
 }
 
 const PetDashboard = () => {
@@ -16,15 +24,25 @@ const PetDashboard = () => {
     const [species, setSpecies] = useState('Dog');
     const [breed, setBreed] = useState('');
     const [age, setAge] = useState<number>(0);
+    const [selectedOwner, setSelectedOwner] = useState('');
+    const [owners, setOwners] = useState<Owner[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [selectedPet, setSelectedPet] = useState<{ id: string, name: string } | null>(null);
+    const [editingPet, setEditingPet] = useState<Pet | null>(null);
+
+    // ... (fetchPets, handleAddPet, handleDelete remain the same)
 
     const fetchPets = async () => {
         setIsLoading(true);
         try {
-            const response = await api.get('/pets/my');
-            setPets(response.data);
+            const [petsRes, ownersRes] = await Promise.all([
+                api.get('/pets/my'),
+                api.get('/auth/clients')
+            ]);
+            setPets(petsRes.data);
+            setOwners(ownersRes.data);
         } catch (error) {
-            console.error("Error al traer mascotas", error);
+            console.error("Error al traer datos", error);
         } finally {
             setIsLoading(false);
         }
@@ -35,10 +53,17 @@ const PetDashboard = () => {
     const handleAddPet = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.post('/pets/register', { name, species, breed: breed || 'Desconocida', age });
+            await api.post('/pets/register', {
+                name,
+                species,
+                breed: breed || 'Desconocida',
+                age,
+                owner: selectedOwner
+            });
             setName('');
             setBreed('');
             setAge(0);
+            setSelectedOwner('');
             fetchPets();
         } catch (error) {
             alert("Error al agregar mascota");
@@ -61,11 +86,11 @@ const PetDashboard = () => {
             <div className="space-y-8 animate-in fade-in duration-500">
                 {/* Header Section */}
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-blue-500/10 rounded-2xl">
-                        <span className="material-icons-round text-blue-500 text-2xl">auto_stories</span>
+                    <div className="p-3 bg-brandTeal/10 rounded-2xl">
+                        <span className="material-icons-round text-brandTeal text-2xl">auto_stories</span>
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold">Gestión de Mascotas</h2>
+                        <h2 className="text-2xl font-bold text-brandTeal dark:text-white">Gestión de Mascotas</h2>
                         <p className="text-slate-500 dark:text-slate-400 text-sm">Administra y registra los pacientes de la clínica</p>
                     </div>
                 </div>
@@ -73,16 +98,16 @@ const PetDashboard = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Form Section */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm sticky top-8">
-                            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-6 flex items-center gap-2">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-brandCream-dark dark:border-slate-800 shadow-sm sticky top-8">
+                            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-6 flex items-center gap-2">
                                 <span className="material-icons-round text-xs">add_circle</span>
                                 Nuevo Registro
                             </h3>
                             <form onSubmit={handleAddPet} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-1.5 ml-1">Nombre</label>
+                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Nombre</label>
                                     <input
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-900 dark:text-white"
                                         placeholder="Ej: Firulais"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
@@ -90,9 +115,9 @@ const PetDashboard = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1.5 ml-1">Especie</label>
+                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Especie</label>
                                     <select
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all appearance-none"
+                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all appearance-none text-slate-900 dark:text-white"
                                         value={species}
                                         onChange={(e) => setSpecies(e.target.value)}
                                     >
@@ -103,17 +128,31 @@ const PetDashboard = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1.5 ml-1">Raza</label>
+                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Raza</label>
                                     <input
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-900 dark:text-white"
                                         placeholder="Ej: Labrador"
                                         value={breed}
                                         onChange={(e) => setBreed(e.target.value)}
                                     />
                                 </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Dueño Responsable</label>
+                                    <select
+                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
+                                        value={selectedOwner}
+                                        onChange={(e) => setSelectedOwner(e.target.value)}
+                                        required
+                                    >
+                                        <option value="">Seleccionar Dueño...</option>
+                                        {owners.map(owner => (
+                                            <option key={owner._id} value={owner._id}>{owner.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
                                 <button
                                     type="submit"
-                                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-2 mt-2"
+                                    className="w-full bg-primary hover:opacity-90 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 mt-2"
                                 >
                                     <span className="material-icons-round text-sm">save</span>
                                     Guardar Mascota
@@ -124,10 +163,10 @@ const PetDashboard = () => {
 
                     {/* List Section */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                            <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
-                                <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500">Listado de Mascotas</h3>
-                                <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-500 text-xs font-bold rounded-full">
+                        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-brandCream-dark dark:border-slate-800 shadow-sm overflow-hidden">
+                            <div className="p-6 border-b border-brandCream-dark dark:border-slate-800 flex justify-between items-center">
+                                <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Listado de Mascotas</h3>
+                                <span className="px-3 py-1 bg-brandTeal/10 text-brandTeal text-xs font-bold rounded-full">
                                     {pets.length} Registros
                                 </span>
                             </div>
@@ -135,9 +174,9 @@ const PetDashboard = () => {
                                 <table className="w-full text-left">
                                     <thead className="bg-slate-50 dark:bg-slate-800/50">
                                         <tr>
-                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Mascota</th>
-                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Especie / Raza</th>
-                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
+                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mascota</th>
+                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Especie / Raza</th>
+                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -161,7 +200,7 @@ const PetDashboard = () => {
                                                 <tr key={pet._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors group">
                                                     <td className="px-6 py-4">
                                                         <div className="flex items-center gap-3">
-                                                            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                                                            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-white transition-all">
                                                                 <span className="material-icons-round text-xl">pets</span>
                                                             </div>
                                                             <span className="font-semibold text-slate-700 dark:text-slate-200">{pet.name}</span>
@@ -176,7 +215,15 @@ const PetDashboard = () => {
                                                     <td className="px-6 py-4 text-right">
                                                         <div className="flex justify-end gap-2">
                                                             <button
-                                                                className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all"
+                                                                onClick={() => setSelectedPet({ id: pet._id, name: pet.name })}
+                                                                className="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
+                                                                title="Historia Clínica"
+                                                            >
+                                                                <span className="material-icons-round text-sm">history_edu</span>
+                                                            </button>
+                                                            <button
+                                                                onClick={() => setEditingPet(pet)}
+                                                                className="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
                                                                 title="Editar"
                                                             >
                                                                 <span className="material-icons-round text-sm">edit</span>
@@ -200,6 +247,20 @@ const PetDashboard = () => {
                     </div>
                 </div>
             </div>
+            {editingPet && (
+                <EditPetModal
+                    pet={editingPet}
+                    onClose={() => setEditingPet(null)}
+                    onUpdate={fetchPets}
+                />
+            )}
+            {selectedPet && (
+                <PetHistoryModal
+                    petId={selectedPet.id}
+                    petName={selectedPet.name}
+                    onClose={() => setSelectedPet(null)}
+                />
+            )}
         </DashboardLayout>
     );
 };

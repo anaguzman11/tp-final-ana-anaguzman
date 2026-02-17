@@ -1,5 +1,7 @@
 // Ejemplo simplificado de src/models/user.model.ts
 import { Schema, model, Document } from 'mongoose';
+import bcrypt from 'bcrypt';
+
 
 export interface IUser extends Document {
   email: string;
@@ -13,6 +15,13 @@ const UserSchema = new Schema<IUser>({
   password: { type: String, required: true },
   name: { type: String, required: true },
   role: { type: String, enum: ['client', 'veterinarian', 'admin'], default: 'client' },
+});
+
+// Antes de guardar, encriptamos
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
 });
 
 export default model<IUser>('User', UserSchema);

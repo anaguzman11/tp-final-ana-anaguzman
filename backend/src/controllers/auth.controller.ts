@@ -71,10 +71,12 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const { email, password } = req.body;
+    console.log(`[DEBUG] Intento de login para: ${email}`);
     const token = await authService.login(email, password);
 
     return res.json({ token });
   } catch (error: any) {
+    console.error(`[DEBUG] Error en login: ${error.message}`);
     if (error.message === "Credenciales inválidas" || error.message === "Usuario no encontrado") {
       return res.status(401).json({ error: error.message });
     }
@@ -83,7 +85,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-//PARA ELIMINAR USUARIO
+// PARA ELIMINAR USUARIO
 export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params; // Obtenemos el ID de la URL
@@ -104,5 +106,16 @@ export const deleteUser = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Error al eliminar el usuario" });
+  }
+};
+
+// PARA OBTENER TODOS LOS CLIENTES
+export const getAllClients = async (req: Request, res: Response) => {
+  try {
+    const clients = await User.find({ role: 'client' }).select('-password');
+    return res.json(clients);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Error al obtener los clientes" });
   }
 };

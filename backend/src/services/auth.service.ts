@@ -10,6 +10,24 @@ if (!process.env.JWT_SECRET) {
 
 const secretKey: string = process.env.JWT_SECRET;
 
+export const seedAdmin = async () => {
+  // 1. Borramos el admin viejo que tiene la contraseña "rota"
+  await User.deleteOne({ email: 'admin@admin.com' });
+
+  // 2. Creamos el nuevo. 
+  // IMPORTANTE: Si tu modelo tiene bcrypt.hash en el .pre('save'), 
+  // mandá la contraseña en TEXTO PLANO acá.
+  const admin = new User({
+    name: 'Administrador',
+    email: 'admin@admin.com',
+    password: 'admin1234', // Texto plano para que el modelo lo encripte UNA SOLA VEZ
+    role: 'admin'
+  });
+
+  await admin.save();
+  console.log('✅ Admin reseteado con éxito');
+};
+
 /**
  * Registra un nuevo usuario
  */
@@ -19,12 +37,10 @@ export const register = async (
   password: string,
   role: UserRole = UserRole.CLIENT // Enum para el valor por defecto
 ): Promise<string> => {
-  const hashedPassword = await bcrypt.hash(password, 10);
-
   const newUser = new User({
     name,
     email,
-    password: hashedPassword,
+    password, // El hook del modelo lo hasheará
     role,
   });
 
@@ -40,9 +56,13 @@ export const login = async (
   password: string,
 ): Promise<string> => {
   const user = await User.findOne({ email });
-  if (!user) throw new Error("Usuario no encontrado");
+  if (!user) {
+    console.log(`[DEBUG] Usuario no encontrado para el email: ${email}`);
+    throw new Error("Usuario no encontrado");
+  }
 
   const isValid = await bcrypt.compare(password, user.password);
+  console.log(`[DEBUG] Resultado de bcrypt.compare: ${isValid}`);
   if (!isValid) throw new Error("Credenciales inválidas");
 
   const payload: JwtPayload = {
