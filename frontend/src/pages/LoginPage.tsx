@@ -13,15 +13,30 @@ const LoginPage = () => {
         try {
             const response = await api.post('/auth/login', { email, password });
             localStorage.setItem('token', response.data.token);
-            alert('¡Bienvenido a Ayudando Patitas!');
+            alert('¡Bienvenido a Patitas Felices!');
             navigate('/dashboard');
         } catch (error: any) {
             alert('Error: Credenciales incorrectas');
         }
     };
 
+    const [isDarkMode, setIsDarkMode] = React.useState(() => {
+        const saved = localStorage.getItem('theme');
+        return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    });
+
+    React.useEffect(() => {
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [isDarkMode]);
+
     const toggleDarkMode = () => {
-        document.documentElement.classList.toggle('dark');
+        setIsDarkMode(!isDarkMode);
     };
 
     return (
@@ -44,8 +59,8 @@ const LoginPage = () => {
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-brandTeal/10 rounded-2xl mb-4">
                             <span className="material-icons-round text-brandTeal text-5xl">pets</span>
                         </div>
-                        <h1 className="text-3xl font-bold tracking-tight text-secondary dark:text-white mb-2">Ayudando Patitas</h1>
-                        <p className="text-slate-500 dark:text-slate-400">Plataforma de gestión veterinaria</p>
+                        <h1 className="text-3xl font-bold tracking-tight text-secondary dark:text-white mb-2">Patitas Felices</h1>
+                        <p className="text-slate-500 dark:text-slate-400">Veterinaria Integral & Bienestar</p>
                     </div>
 
                     <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 rounded-3xl shadow-xl border border-brandCream-dark dark:border-slate-800">

@@ -61,12 +61,12 @@ const MedicalHistoryPage = () => {
         <DashboardLayout>
             <div className="space-y-8 animate-in fade-in duration-500">
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-brandTeal/10 rounded-2xl">
-                        <span className="material-icons-round text-brandTeal text-2xl">history_edu</span>
+                    <div className="p-3 bg-brandTeal/10 dark:bg-brandGreen/10 rounded-2xl">
+                        <span className="material-icons-round text-brandTeal dark:text-brandGreen text-2xl">history_edu</span>
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-brandTeal dark:text-white">Historial Clínico</h2>
-                        <p className="text-slate-500 dark:text-slate-400 text-sm">Registro centralizado de atenciones y diagnósticos</p>
+                        <h2 className="text-2xl font-bold text-[#2C5F5D] dark:text-white">Historial Clínico</h2>
+                        <p className="text-slate-600 dark:text-slate-400 text-sm">Registro centralizado de atenciones y diagnósticos</p>
                     </div>
                 </div>
 

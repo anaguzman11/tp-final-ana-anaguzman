@@ -26,8 +26,23 @@ const RegisterPage = () => {
         }
     };
 
+    const [isDarkMode, setIsDarkMode] = React.useState(() => {
+        const saved = localStorage.getItem('theme');
+        return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    });
+
+    React.useEffect(() => {
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [isDarkMode]);
+
     const toggleDarkMode = () => {
-        document.documentElement.classList.toggle('dark');
+        setIsDarkMode(!isDarkMode);
     };
 
     return (
@@ -49,7 +64,7 @@ const RegisterPage = () => {
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-brandTeal/10 rounded-2xl mb-4">
                             <span className="material-icons-round text-brandTeal text-5xl">person_add</span>
                         </div>
-                        <h1 className="text-3xl font-bold tracking-tight text-secondary dark:text-white mb-2">Crear Cuenta</h1>
+                        <h1 className="text-3xl font-bold tracking-tight text-secondary dark:text-white mb-2">Patitas Felices</h1>
                         <p className="text-slate-500 dark:text-slate-400">Únete a nuestra comunidad veterinaria</p>
                     </div>
 

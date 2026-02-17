@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 interface DashboardLayoutProps {
@@ -6,13 +6,25 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = React.useState(() => {
+        const saved = localStorage.getItem('theme');
+        return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    });
     const navigate = useNavigate();
     const location = useLocation();
 
+    React.useEffect(() => {
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [isDarkMode]);
+
     const toggleDarkMode = () => {
         setIsDarkMode(!isDarkMode);
-        document.documentElement.classList.toggle('dark');
     };
 
     const menuItems = [
@@ -27,13 +39,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     };
 
     return (
-        <div className={`min-h-screen transition-colors duration-200 ${isDarkMode ? 'dark bg-slate-950 text-slate-100' : 'bg-brandCream text-secondary'}`}>
+        <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-slate-950 text-slate-100' : 'bg-[#F2ECE4] text-[#2C5F5D]'}`}>
             {/* Sidebar - Desktop */}
             <aside className="fixed left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-brandCream-dark dark:border-slate-800 z-30 hidden lg:block">
                 <div className="p-6">
-                    <div className="flex items-center gap-3 text-secondary mb-10">
+                    <div className="flex items-center gap-3 text-brandTeal dark:text-white mb-10">
                         <span className="material-icons-round text-3xl">pets</span>
-                        <h1 className="font-bold text-xl tracking-tight">Ayudando Patitas</h1>
+                        <h1 className="font-bold text-xl tracking-tight">Patitas Felices</h1>
                     </div>
                     <nav className="space-y-2">
                         {menuItems.map((item) => (
@@ -41,7 +53,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                                 key={item.path}
                                 onClick={() => navigate(item.path)}
                                 className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl transition-all group ${location.pathname === item.path
-                                    ? 'bg-brandGreen text-secondary shadow-lg shadow-brandGreen/20 font-bold'
+                                    ? 'bg-brandTeal text-white shadow-lg shadow-brandTeal/20 font-bold'
                                     : 'text-slate-600 dark:text-slate-400 hover:bg-brandCream-dark dark:hover:bg-slate-800 hover:text-secondary'
                                     }`}
                             >
@@ -67,9 +79,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <main className="lg:ml-64 p-4 lg:p-8">
                 {/* Header - Mobile */}
                 <header className="flex items-center justify-between lg:hidden mb-8">
-                    <div className="flex items-center gap-2 text-secondary">
+                    <div className="flex items-center gap-2 text-brandTeal dark:text-white">
                         <span className="material-icons-round text-2xl">pets</span>
-                        <h1 className="font-bold text-lg">Ayudando Patitas</h1>
+                        <h1 className="font-bold text-lg">Patitas Felices</h1>
                     </div>
                     <div className="flex items-center gap-2">
                         <button className="p-2 bg-white dark:bg-slate-900 border border-brandCream-dark dark:border-slate-800 rounded-full" onClick={toggleDarkMode}>
@@ -102,7 +114,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                     <button
                         key={item.path}
                         onClick={() => navigate(item.path)}
-                        className={`flex flex-col items-center gap-1 transition-colors ${location.pathname === item.path ? 'text-primary' : 'text-slate-400 hover:text-primary'
+                        className={`flex flex-col items-center gap-1 transition-colors ${location.pathname === item.path ? 'text-brandTeal' : 'text-slate-400 hover:text-brandTeal'
                             }`}
                     >
                         <span className="material-icons-round">{item.icon}</span>

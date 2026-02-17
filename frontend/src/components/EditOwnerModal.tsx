@@ -1,51 +1,34 @@
 import React, { useState } from 'react';
 import api from '../api/axios';
 
-interface Pet {
+interface Owner {
     _id: string;
     name: string;
-    species: string;
-    breed: string;
-    age: number;
-    owner: string | { _id: string, name: string };
+    email: string;
+    telephone?: string;
 }
 
-interface EditPetModalProps {
-    pet: Pet;
+interface EditOwnerModalProps {
+    owner: Owner;
     onClose: () => void;
     onUpdate: () => void;
 }
 
-const EditPetModal: React.FC<EditPetModalProps> = ({ pet, onClose, onUpdate }) => {
-    const [name, setName] = useState(pet.name);
-    const [species, setSpecies] = useState(pet.species);
-    const [breed, setBreed] = useState(pet.breed);
-    const [age, setAge] = useState(pet.age);
-    const [selectedOwner, setSelectedOwner] = useState(typeof pet.owner === 'object' ? pet.owner._id : pet.owner || '');
-    const [owners, setOwners] = useState<{ _id: string, name: string }[]>([]);
+const EditOwnerModal: React.FC<EditOwnerModalProps> = ({ owner, onClose, onUpdate }) => {
+    const [name, setName] = useState(owner.name);
+    const [email, setEmail] = useState(owner.email);
+    const [telephone, setTelephone] = useState(owner.telephone || '');
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    React.useEffect(() => {
-        const fetchOwners = async () => {
-            try {
-                const response = await api.get('/auth/clients');
-                setOwners(response.data);
-            } catch (err) {
-                console.error("Error al cargar dueños en modal", err);
-            }
-        };
-        fetchOwners();
-    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            await api.put(`/pets/${pet._id}`, { name, species, breed, age, owner: selectedOwner });
+            await api.put(`/auth/update/${owner._id}`, { name, email, telephone });
             onUpdate();
             onClose();
         } catch (error) {
-            alert("Error al actualizar la mascota");
+            alert("Error al actualizar el dueño");
         } finally {
             setIsSubmitting(false);
         }
@@ -60,7 +43,7 @@ const EditPetModal: React.FC<EditPetModalProps> = ({ pet, onClose, onUpdate }) =
                         <div className="p-2 bg-brandTeal/10 dark:bg-brandGreen/10 rounded-xl">
                             <span className="material-icons-round text-brandTeal dark:text-brandGreen">edit</span>
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white">Editar Mascota</h3>
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white">Editar Dueño</h3>
                     </div>
                     <button
                         onClick={onClose}
@@ -73,7 +56,7 @@ const EditPetModal: React.FC<EditPetModalProps> = ({ pet, onClose, onUpdate }) =
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Nombre</label>
+                        <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Nombre Completo</label>
                         <input
                             className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
                             value={name}
@@ -82,50 +65,22 @@ const EditPetModal: React.FC<EditPetModalProps> = ({ pet, onClose, onUpdate }) =
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Especie</label>
-                        <select
-                            className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
-                            value={species}
-                            onChange={(e) => setSpecies(e.target.value)}
-                        >
-                            <option value="Dog">Perro</option>
-                            <option value="Cat">Gato</option>
-                            <option value="Bird">Ave</option>
-                            <option value="Other">Otro</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Raza</label>
+                        <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Email</label>
                         <input
+                            type="email"
                             className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
-                            value={breed}
-                            onChange={(e) => setBreed(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Edad</label>
-                        <input
-                            type="number"
-                            className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
-                            value={age}
-                            onChange={(e) => setAge(parseInt(e.target.value) || 0)}
-                            min="0"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Dueño Responsable</label>
-                        <select
-                            className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
-                            value={selectedOwner}
-                            onChange={(e) => setSelectedOwner(e.target.value)}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
-                        >
-                            <option value="">Seleccionar Dueño...</option>
-                            {owners.map(o => (
-                                <option key={o._id} value={o._id}>{o.name}</option>
-                            ))}
-                        </select>
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Teléfono</label>
+                        <input
+                            className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
+                            value={telephone}
+                            onChange={(e) => setTelephone(e.target.value)}
+                        />
                     </div>
 
                     <div className="pt-2">
@@ -148,4 +103,4 @@ const EditPetModal: React.FC<EditPetModalProps> = ({ pet, onClose, onUpdate }) =
     );
 };
 
-export default EditPetModal;
+export default EditOwnerModal;

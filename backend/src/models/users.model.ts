@@ -8,6 +8,7 @@ export interface IUser extends Document {
   password: string;
   name: string;
   role: 'client' | 'veterinarian' | 'admin';
+  telephone?: string;
 }
 //defino el esquema de Mongoose, creo USER y con el rol defino si es un usuario cliente, veterinario o admin
 const UserSchema = new Schema<IUser>({
@@ -15,6 +16,7 @@ const UserSchema = new Schema<IUser>({
   password: { type: String, required: true },
   name: { type: String, required: true },
   role: { type: String, enum: ['client', 'veterinarian', 'admin'], default: 'client' },
+  telephone: { type: String },
 });
 
 // Antes de guardar, encriptamos

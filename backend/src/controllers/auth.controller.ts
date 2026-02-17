@@ -14,8 +14,8 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password, role } = req.body;
-    await authService.register(name, email, password, role);
+    const { name, email, password, role, telephone } = req.body;
+    await authService.register(name, email, password, role, telephone);
 
     return res.status(201).json({ message: "Usuario creado exitosamente" });
   } catch (error: any) {

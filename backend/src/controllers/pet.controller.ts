@@ -12,16 +12,15 @@ export const createPet = async (req: Request, res: Response) => {
     }
 
     const user = (req as any).user as JwtPayload;
-    const ownerId = user.id;
-
-    const { name, species, breed, age } = req.body;
+    const { name, species, breed, age, owner } = req.body;
+    const finalOwnerId = owner || user.id; // Si viene owner en el body lo usamos, si no el del token
 
     const newPet = new Pet({
       name,
       species,
       breed,
-      age,
-      owner: ownerId,
+      age: Number(age),
+      owner: finalOwnerId,
     });
 
     const savedPet = await newPet.save();
@@ -37,10 +36,14 @@ export const createPet = async (req: Request, res: Response) => {
 export const getMyPets = async (req: Request, res: Response) => {
   try {
     const user = (req as any).user as JwtPayload;
-    const ownerId = user.id;
 
-    // Busca todas las mascotas, y **popula** los campos 'name' y 'email' del dueño
-    const pets = await Pet.find({ owner: ownerId }).populate('owner', 'name email');
+    let query = {};
+    // Si es cliente, solo ve las suyas. Si es admin o vet, ve todas.
+    if (user.role === 'client') {
+      query = { owner: user.id };
+    }
+
+    const pets = await Pet.find(query).populate('owner', 'name email');
     return res.json(pets);
   } catch (error) {
     console.error(error);

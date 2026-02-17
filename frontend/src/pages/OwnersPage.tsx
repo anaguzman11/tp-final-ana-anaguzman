@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
 import DashboardLayout from '../components/DashboardLayout';
+import EditOwnerModal from '../components/EditOwnerModal';
 
 interface Owner {
     _id: string;
@@ -15,6 +16,7 @@ const OwnersPage = () => {
     const [email, setEmail] = useState('');
     const [telephone, setTelephone] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [editingOwner, setEditingOwner] = useState<Owner | null>(null);
 
     const fetchOwners = async () => {
         setIsLoading(true);
@@ -44,16 +46,27 @@ const OwnersPage = () => {
         }
     };
 
+    const handleDeleteOwner = async (id: string) => {
+        if (window.confirm("¿Seguro que quieres borrar a este dueño? Esto también podría afectar el acceso si es un usuario.")) {
+            try {
+                await api.delete(`/auth/delete/${id}`);
+                fetchOwners();
+            } catch (error) {
+                alert("No se pudo eliminar el dueño. Verifica tus permisos.");
+            }
+        }
+    };
+
     return (
         <DashboardLayout>
             <div className="space-y-8 animate-in fade-in duration-500">
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-brandTeal/10 rounded-2xl">
-                        <span className="material-icons-round text-brandTeal text-2xl">person</span>
+                    <div className="p-3 bg-brandTeal/10 dark:bg-brandGreen/10 rounded-2xl">
+                        <span className="material-icons-round text-brandTeal dark:text-brandGreen text-2xl">person</span>
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-brandTeal dark:text-white">Gestión de Dueños</h2>
-                        <p className="text-slate-500 dark:text-slate-400 text-sm">Administra la información de contacto de los clientes</p>
+                        <h2 className="text-2xl font-bold text-[#2C5F5D] dark:text-white">Gestión de Dueños</h2>
+                        <p className="text-slate-600 dark:text-slate-400 text-sm">Administra la información de contacto de los clientes</p>
                     </div>
                 </div>
 
@@ -117,13 +130,14 @@ const OwnersPage = () => {
                                         <tr>
                                             <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Nombre</th>
                                             <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email / Teléfono</th>
+                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                         {isLoading ? (
-                                            <tr><td colSpan={2} className="px-6 py-10 text-center text-slate-400 italic">Cargando dueños...</td></tr>
-                                        ) : owners.length === 0 ? (
-                                            <tr><td colSpan={2} className="px-6 py-10 text-center text-slate-400 italic">No hay dueños registrados.</td></tr>
+                                            <tr><td colSpan={3} className="px-6 py-10 text-center text-slate-400 italic">Cargando dueños...</td></tr>
+                                        ) : !Array.isArray(owners) || owners.length === 0 ? (
+                                            <tr><td colSpan={3} className="px-6 py-10 text-center text-slate-400 italic">No hay dueños registrados.</td></tr>
                                         ) : (
                                             owners.map((owner) => (
                                                 <tr key={owner._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
@@ -136,6 +150,24 @@ const OwnersPage = () => {
                                                             <div className="text-slate-500 dark:text-slate-400">{owner.telephone || 'Sin teléfono'}</div>
                                                         </div>
                                                     </td>
+                                                    <td className="px-6 py-4 text-right">
+                                                        <div className="flex justify-end gap-2">
+                                                            <button
+                                                                onClick={() => setEditingOwner(owner)}
+                                                                className="p-2 text-slate-400 hover:text-brandTeal hover:bg-brandTeal/10 rounded-lg transition-all"
+                                                                title="Editar"
+                                                            >
+                                                                <span className="material-icons-round text-sm">edit</span>
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDeleteOwner(owner._id)}
+                                                                className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+                                                                title="Eliminar"
+                                                            >
+                                                                <span className="material-icons-round text-sm">delete</span>
+                                                            </button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             ))
                                         )}
@@ -146,6 +178,13 @@ const OwnersPage = () => {
                     </div>
                 </div>
             </div>
+            {editingOwner && (
+                <EditOwnerModal
+                    owner={editingOwner}
+                    onClose={() => setEditingOwner(null)}
+                    onUpdate={fetchOwners}
+                />
+            )}
         </DashboardLayout>
     );
 };

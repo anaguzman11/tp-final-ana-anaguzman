@@ -35,13 +35,15 @@ export const register = async (
   name: string,
   email: string,
   password: string,
-  role: UserRole = UserRole.CLIENT // Enum para el valor por defecto
+  role: UserRole = UserRole.CLIENT, // Enum para el valor por defecto
+  telephone?: string
 ): Promise<string> => {
   const newUser = new User({
     name,
     email,
     password, // El hook del modelo lo hasheará
     role,
+    telephone,
   });
 
   const savedUser = await newUser.save();

@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+@theme {
+    --color-brand-green: #A9C47F;
+    --color-brand-green-dark: #8BA664;
+    --color-brand-teal: #2C5F5D;
+    --color-brand-teal-light: #3D7A78;
+    --color-brand-blue: #89CFF0;
+    --color-brand-blue-light: #BAE1F2;
+    --color-brand-cream: #F2ECE4;
+    --color-brand-cream-dark: #E5DED5;
+
+    --font-plus-jakarta: "Plus Jakarta Sans", "Inter", sans-serif;
+
+    --shadow-brand: 0 10px 15px -3px rgba(44, 95, 93, 0.1), 0 4px 6px -2px rgba(44, 95, 93, 0.05);
+}
+
+@layer base {
+    body {
+        @apply font-plus-jakarta;
+    }
+}

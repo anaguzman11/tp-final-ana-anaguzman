@@ -32,11 +32,11 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
   });
 };
 
-export const authorize = (requiredRole: UserRole) => {
+export const authorize = (...requiredRoles: UserRole[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = (req as any).user as JwtPayload;
 
-    if (user && user.role === requiredRole) {
+    if (user && requiredRoles.includes(user.role as UserRole)) {
       next();
     } else {
       res.status(403).json({ error: "Acceso denegado: permisos insuficientes" });

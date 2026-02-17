@@ -43,9 +43,12 @@ router.put(
 );
 
 // ruta para eliminar usuario
-router.delete('/delete/:id', authenticate, authorize(UserRole.ADMIN), deleteUser);
+router.delete('/delete/:id', authenticate, authorize(UserRole.ADMIN, UserRole.VETERINARIAN), deleteUser);
 
 
+
+// Ruta para obtener todos los clientes
+router.get('/clients', authenticate, getAllClients);
 
 router.get('/admin-data', authenticate, authorize(UserRole.ADMIN), (req, res) => {
   res.json({ message: "Bienvenido, Administrador" });

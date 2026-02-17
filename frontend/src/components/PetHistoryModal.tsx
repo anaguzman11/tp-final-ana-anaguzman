@@ -63,8 +63,8 @@ const PetHistoryModal: React.FC<PetHistoryModalProps> = ({ petId, petName, onClo
                 {/* Header */}
                 <div className="p-6 border-b border-brandCream-dark dark:border-slate-800 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-brandTeal/10 rounded-xl">
-                            <span className="material-icons-round text-brandTeal">history_edu</span>
+                        <div className="p-2 bg-brandTeal/10 dark:bg-brandGreen/10 rounded-xl">
+                            <span className="material-icons-round text-brandTeal dark:text-brandGreen">history_edu</span>
                         </div>
                         <div>
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white">Historia Clínica</h3>
