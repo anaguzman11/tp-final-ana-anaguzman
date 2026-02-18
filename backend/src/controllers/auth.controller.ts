@@ -42,10 +42,10 @@ export const updateUser = async (req: Request, res: Response) => {
       id,
       updateData,
       {
-        new: true,           // Para que devuelva el usuario con los cambios ya hechos
-        runValidators: true  // Para que respete las reglas del Modelo (ej: email válido)
+        new: true,
+        runValidators: true
       }
-    ).select('-password');   // 🛡️ SEGURIDAD: Esto quita la contraseña del resultado
+    ).select('-password');
 
     if (!updatedUser) {
       return res.status(404).json({ error: "Usuario no encontrado" });

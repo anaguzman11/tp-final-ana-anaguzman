@@ -1,22 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-    --color-brand-green: #A9C47F;
-    --color-brand-green-dark: #8BA664;
-    --color-brand-teal: #2C5F5D;
-    --color-brand-teal-light: #3D7A78;
-    --color-brand-blue: #89CFF0;
-    --color-brand-blue-light: #BAE1F2;
-    --color-brand-cream: #F2ECE4;
-    --color-brand-cream-dark: #E5DED5;
+    /* Colores de la nueva paleta */
+    --color-bluby: #4F79FF;
+    --color-mary: #FFAA3B;
+    --color-hope: #FF8A02;
+    --color-bone: #FFF5F4;
 
+    /* Mapeo de colores semánticos (para no cambiar cada componente) */
+    --color-primary: var(--color-bluby);
+    --color-secondary: var(--color-hope);
+    --color-accent: var(--color-mary);
+    --color-background-soft: var(--color-bone);
+
+    /* Tipografía */
     --font-plus-jakarta: "Plus Jakarta Sans", "Inter", sans-serif;
 
-    --shadow-brand: 0 10px 15px -3px rgba(44, 95, 93, 0.1), 0 4px 6px -2px rgba(44, 95, 93, 0.05);
+    /* Actualizamos la sombra para que use el nuevo tono Hope/Mary si lo deseas */
+    --shadow-brand: 0 10px 15px -3px rgba(255, 138, 2, 0.1), 0 4px 6px -2px rgba(255, 138, 2, 0.05);
 }
 
 @layer base {
     body {
-        @apply font-plus-jakarta;
+        @apply font-plus-jakarta bg-bone;
+        /* Aplicamos Bone como fondo base */
     }
 }

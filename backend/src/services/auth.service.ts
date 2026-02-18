@@ -25,7 +25,7 @@ export const seedAdmin = async () => {
   });
 
   await admin.save();
-  console.log('✅ Admin reseteado con éxito');
+  console.log('✅ Admin "admin@admin.com" (pass: admin1234) reseteado con éxito');
 };
 
 /**
@@ -35,7 +35,7 @@ export const register = async (
   name: string,
   email: string,
   password: string,
-  role: UserRole = UserRole.CLIENT, // Enum para el valor por defecto
+  role: UserRole = UserRole.VETERINARIAN, // Enum para el valor por defecto
   telephone?: string
 ): Promise<string> => {
   const newUser = new User({
@@ -57,7 +57,7 @@ export const login = async (
   email: string,
   password: string,
 ): Promise<string> => {
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: email.toLowerCase() });
   if (!user) {
     console.log(`[DEBUG] Usuario no encontrado para el email: ${email}`);
     throw new Error("Usuario no encontrado");

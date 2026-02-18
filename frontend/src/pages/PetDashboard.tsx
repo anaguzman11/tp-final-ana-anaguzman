@@ -29,8 +29,7 @@ const PetDashboard = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedPet, setSelectedPet] = useState<{ id: string, name: string } | null>(null);
     const [editingPet, setEditingPet] = useState<Pet | null>(null);
-
-    // ... (fetchPets, handleAddPet, handleDelete remain the same)
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const fetchPets = async () => {
         setIsLoading(true);
@@ -52,6 +51,8 @@ const PetDashboard = () => {
 
     const handleAddPet = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (isSubmitting) return;
+        setIsSubmitting(true);
         try {
             await api.post('/pets/register', {
                 name,
@@ -67,6 +68,8 @@ const PetDashboard = () => {
             fetchPets();
         } catch (error) {
             alert("Error al agregar mascota");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -76,7 +79,7 @@ const PetDashboard = () => {
                 await api.delete(`/pets/${id}`);
                 fetchPets();
             } catch (error) {
-                alert("No se pudo eliminar");
+                alert("No se pudo eliminar: " + (error as any).response?.data?.error || "Error desconocido");
             }
         }
     };
@@ -152,9 +155,14 @@ const PetDashboard = () => {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-full bg-primary hover:opacity-90 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 mt-2"
+                                    disabled={isSubmitting}
+                                    className="w-full bg-primary hover:opacity-90 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 mt-2"
                                 >
-                                    <span className="material-icons-round text-sm">save</span>
+                                    {isSubmitting ? (
+                                        <span className="material-icons-round animate-spin text-sm">sync</span>
+                                    ) : (
+                                        <span className="material-icons-round text-sm">save</span>
+                                    )}
                                     Guardar Mascota
                                 </button>
                             </form>

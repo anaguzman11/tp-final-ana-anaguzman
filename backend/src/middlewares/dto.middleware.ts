@@ -7,7 +7,7 @@ const validateDto = (req: Request, res: Response, next: NextFunction) => {
   console.log("Validating DTO for request to", errors);
 
   if (errors.isEmpty()) {
-    return next(); // No errors, continue to the controller
+    return next();
   }
 
   console.log("Errores de validación:", errors.array());

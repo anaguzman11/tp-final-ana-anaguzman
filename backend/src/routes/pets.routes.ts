@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/auth.middleware';
 import { body } from 'express-validator';
-// ✅ IMPORTACIÓN ÚNICA: Todas las funciones en una sola línea
 import {
   createPet,
   getMyPets,

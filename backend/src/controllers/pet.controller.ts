@@ -3,7 +3,7 @@ import Pet from '../models/pet.model';
 import { validationResult } from 'express-validator';
 import { JwtPayload } from '../types/auth';
 
-// Función para registrar una nueva mascota (solo para usuarios logeados)
+// Función para REGISTRAR una nueva mascota (solo para usuarios logeados)
 export const createPet = async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
@@ -32,7 +32,7 @@ export const createPet = async (req: Request, res: Response) => {
   }
 };
 
-// Función para listar las mascotas de un usuario específico
+// Función para LISTAR las mascotas de un usuario específico
 export const getMyPets = async (req: Request, res: Response) => {
   try {
     const user = (req as any).user as JwtPayload;
@@ -51,15 +51,18 @@ export const getMyPets = async (req: Request, res: Response) => {
   }
 };
 
-// Función para obtener los detalles de una mascota específica por su ID
+// Función para OBTENER los detalles de una mascota específica por su ID
 export const getPetById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const user = (req as any).user as JwtPayload; // Obtenemos el usuario del token
-    const ownerId = user.id;
+    const user = (req as any).user as JwtPayload;
+    let query: any = { _id: id };
+    // Si es cliente, solo puede ver la suya. Si es admin/vet, ve cualquiera.
+    if (user.role === 'client') {
+      query.owner = user.id;
+    }
 
-    // ✅ Solución: Usamos findOne para buscar por _id Y ownerId
-    const pet = await Pet.findOne({ _id: id, owner: ownerId }).populate('owner', 'name email');
+    const pet = await Pet.findOne(query).populate('owner', 'name email');
 
     if (!pet) {
       return res.status(404).json({ error: "Mascota no encontrada o no te pertenece" });
@@ -77,13 +80,15 @@ export const updatePet = async (req: Request, res: Response) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    // Obtenemos el ID del usuario del token (gracias al middleware authenticate)
     const user = (req as any).user as JwtPayload;
-    const ownerId = user.id;
 
-    // Buscamos por ID de mascota Y por ID de dueño para asegurar la propiedad
+    let query: any = { _id: id };
+    if (user.role === 'client') {
+      query.owner = user.id;
+    }
+
     const updatedPet = await Pet.findOneAndUpdate(
-      { _id: id, owner: ownerId },
+      query,
       updateData,
       { new: true, runValidators: true }
     );
@@ -107,10 +112,13 @@ export const deletePet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const user = (req as any).user as JwtPayload;
-    const ownerId = user.id;
 
-    // Intentamos borrar asegurándonos que el dueño sea el que está logueado
-    const deletedPet = await Pet.findOneAndDelete({ _id: id, owner: ownerId });
+    let query: any = { _id: id };
+    if (user.role === 'client') {
+      query.owner = user.id;
+    }
+
+    const deletedPet = await Pet.findOneAndDelete(query);
 
     if (!deletedPet) {
       return res.status(404).json({ error: "Mascota no encontrada o no tienes permiso para eliminarla" });
