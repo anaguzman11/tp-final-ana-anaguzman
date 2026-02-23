@@ -1,157 +1,87 @@
-# FRONTEND
+# Patitas Felices - Gestión Veterinaria 🐾
 
-# Patitas Felices - Adopción de Mascotas
+Bienvenido a **Patitas Felices**, una aplicación integral para la administración de clínicas veterinarias. Este proyecto evolucionó a partir de nuestro **TP Intermedio**, transformándose en una plataforma completa con Frontend y Backend robustos.
 
-Aplicación web para la adopción de mascotas, desarrollada como proyecto final de la Diplomatura en Desarrollo Web con Inteligencia Artificial.
+## 🚀 Evolución del Proyecto
+El proyecto comenzó como una base conceptual en el TP Intermedio. Con la ayuda de la automatización de **Antigravity** y la inspiración en el diseño de **Stitch**, logramos desarrollar una interfaz moderna ("Summer Theme") y una API escalable.
 
-## 📋 Características
+---
 
-- **Registro e Inicio de Sesión**: Autenticación segura con JWT.
-- **Gestión de Mascotas**: CRUD completo para mascotas (crear, ver, editar, eliminar).
-- **Roles de Usuario**: Administrador y Usuario regular.
-- **Diseño Responsivo**: Interfaz adaptada para móviles y escritorio.
-
-## 🚀 Instalación y Ejecución
-
-### Requisitos Previos
-
-- Node.js (v16 o superior)
-- npm
-
-### 1. Clonar el repositorio
-
-```bash
-git clone <url-del-repositorio>
-cd tp-final-ana-guzman
-```
-
-### 2. Configurar el Backend
-
-```bash
-cd backend
-npm install
-# Crear archivo .env en backend/ con las siguientes variables:
-# MONGODB_URI=tu_conexion_mongodb
-# JWT_SECRET=tu_secreto_jwt
-# JWT_EXPIRES_IN=1h
-npm run dev
-```
-
-### 3. Configurar el Frontend
-
-```bash
-cd frontend
-npm install
-# Crear archivo .env en frontend/ con la siguiente variable:
-# VITE_API_URL=http://localhost:3000
-npm run dev
-```
-
-### 4. Acceder a la aplicación
-
-Abrir [http://localhost:5173](http://localhost:5173) en el navegador.
-
-## 🛠️ Tecnologías Utilizadas
-
-### Backend
-- **Node.js**
-- **Express.js**
-- **MongoDB** (Mongoose)
-- **JWT** (JSON Web Tokens)
-- **Bcrypt** (Hashing de contraseñas)
+## �️ Tecnologías Utilizadas
 
 ### Frontend
-- **React**
-- **Vite**
-- **Tailwind CSS**
-- **Axios**
+- **React 19** + **Vite**: Para una experiencia de desarrollo rápida y moderna.
+- **TypeScript**: Garantizando tipado fuerte y menos errores en tiempo de ejecución.
+- **Tailwind CSS**: Con una paleta de colores personalizada ("Summer Lime", "Summer Cyan", etc.).
+- **Material Icons**: Para una iconografía intuitiva.
+- **Antigravity**: Utilizado para la automatización de componentes y lógica de negocio.
 
-## 👥 Autores
+### Backend
+- **Node.js** + **Express**: Servidor de alto rendimiento.
+- **MongoDB** + **Mongoose**: Base de datos NoSQL para flexibilidad en los registros.
+- **JWT (JSON Web Tokens)**: Seguridad en la autenticación y manejo de sesiones.
+- **Bcrypt**: Encriptación segura de contraseñas.
 
-- Ana Guzmán
-- [Otros colaboradores si aplica]
+---
 
-## 📄 Licencia
+## � Acceso de Administrador
+Para probar todas las funcionalidades (gestión de dueños, mascotas e historiales), utiliza las siguientes credenciales:
 
-Este proyecto es para fines educativos.
+- **Usuario**: `admin@admin.com`
+- **Contraseña**: `admin1234`
 
+---
 
-# VETMANAGER
+## 🧪 Verificación de la API (Backend)
+Durante el desarrollo inicial, verificamos la robustez del backend utilizando **CURLs** e **Insomnia**. Aquí algunos ejemplos clave:
 
-Aplicación web para la gestión de mascotas, desarrollada como proyecto final de la Diplomatura en Desarrollo Web con Inteligencia Artificial.
-
-# CARACTERISTICAS
-
-- **Registro e Inicio de Sesión**: Autenticación segura con JWT.
-- **Gestión de Mascotas**: CRUD completo para mascotas (crear, ver, editar, eliminar).
-- **Roles de Usuario**: Administrador y Usuario regular.
-- **Diseño Responsivo**: Interfaz adaptada para móviles y escritorio.
-
-Los datos se almacenan en una base de datos MongoDB.
-clientes, mascotas, citas, veterinarios, medicamentos, historial de citas, historial de medicamentos.
-
-## usuarios
-
-- admin: admin.json 
-
-```json
-{
-    "id": "675f2b6c2b6c2b6c2b6c2b6c",
-    "name": "admin",
-    "email": "admin@admin.com",
-    "password": "admin",
-    "role": "admin"
-}
+### 1. Iniciar Sesión (Login)
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"email": "admin@admin.com", "password": "admin1234"}'
 ```
 
-- cliente: clientes.json 
-
-```json
-{
-    "id": "1",
-    "nombre": "Ana",
-    "apellido": "Guzman",
-    "email": "cliente@cliente.com",
-    "telefono": "12345678",
-    "direccion": "direccion"
-}
+### 2. Registrar Mascota (Requiere Token)
+```bash
+curl -X POST http://localhost:3000/api/pets/register \
+     -H "Authorization: Bearer TU_TOKEN_JWT" \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Firulais", "species": "Dog", "breed": "Poodle", "age": 3, "owner": "ID_DEL_DUEÑO"}'
 ```
 
-## mascotas: mascotas.json
-
-```json
-{
-    "id": "1",
-    "nombre": "mascota",
-    "especie": "perro",
-    "raza": "pastor aleman",
-    "edad": 2,
-    "cliente_id": "1"
-}
-
-### historiales clinicos: historiales_clinicos.json
-
-```json
-{
-    "id": "1",
-    "fecha": "2022-01-01",
-    "descripcion": "Goyo se enfermo de gripe",
-    "mascota_id": "1",
-    
-}, 
-{
-    "id":"1",
-    "fecha": "2022-01-02",
-    "descripcion": "Goyo sigue igual",
-    "mascota_id": "1",
-}
-
-### Datos de Loguieo: usuarios.json
-
-```json
-{
-    "id": "1",
-   "user": "admin",
-   "password": "admin"
-}
+### 3. Obtener Historial Clínico
+```bash
+curl -X GET http://localhost:3000/api/medical-records/all \
+     -H "Authorization: Bearer TU_TOKEN_JWT"
 ```
+
+---
+
+## 📋 Características Principales
+- **Gestión de Dueños**: Registro y edición de clientes (rol `client`).
+- **Dashboard de Mascotas**: Visualización clara con filtros de búsqueda por nombre, especie o dueño.
+- **Historial Clínico**: Registro centralizado de atenciones médicos para cada mascota.
+- **Modo Oscuro/Claro**: Interfaz adaptable con el nuevo "Summer Theme".
+- **Buscador Inteligente**: Filtrado en tiempo real en todas las tablas de datos.
+
+---
+
+## ⚙️ Instalación
+
+### Backend
+1. Navega a `/backend`.
+2. Ejecuta `npm install`.
+3. Crea un archivo `.env` (ver `.env.example`).
+4. Inicia con `npm run dev`.
+
+### Frontend
+1. Navega a `/frontend`.
+2. Ejecuta `npm install`.
+3. Inicia con `npm run dev`.
+
+---
+
+## 👤 Autor
+Desarrollado por **Ana Guzmán**.
+*Proyecto Final de la Diplomatura en Desarrollo Web con Inteligencia Artificial.*
