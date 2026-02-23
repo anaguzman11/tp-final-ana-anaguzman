@@ -100,8 +100,9 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     return res.json({
       message: "Usuario eliminado correctamente",
-      user: deletedUser
+      id: deletedUser._id // Solo devolvés el ID para confirmar
     });
+
 
   } catch (error) {
     console.error(error);
