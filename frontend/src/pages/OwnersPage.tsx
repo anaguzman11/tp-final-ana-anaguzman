@@ -17,6 +17,7 @@ const OwnersPage = () => {
     const [telephone, setTelephone] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [editingOwner, setEditingOwner] = useState<Owner | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const fetchOwners = async () => {
         setIsLoading(true);
@@ -35,7 +36,13 @@ const OwnersPage = () => {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.post('/auth/register', { name, email, password: 'temporaryPassword123!', role: 'client', telephone });
+            await api.post('/auth/register', {
+                name,
+                email,
+                password: 'temporaryPassword123!',
+                role: 'client',
+                telephone
+            });
             setName('');
             setEmail('');
             setTelephone('');
@@ -57,31 +64,45 @@ const OwnersPage = () => {
         }
     };
 
+    const filteredOwners = Array.isArray(owners) ? owners.filter(owner =>
+        owner.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        owner.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (owner.telephone && owner.telephone.includes(searchTerm))
+    ) : [];
+
     return (
         <DashboardLayout>
             <div className="space-y-8 animate-in fade-in duration-500">
+
+                {/* CABECERA: ICONO Y TÍTULO UNIFICADOS EN VERDE LIMA */}
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-brandTeal/10 dark:bg-brandGreen/10 rounded-2xl">
-                        <span className="material-icons-round text-brandTeal dark:text-brandGreen text-2xl">person</span>
+                    <div className="p-3 bg-summer-lime/20 rounded-2xl">
+                        <span className="material-icons-round text-summer-lime text-2xl">person</span>
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-[#2C5F5D] dark:text-white">Gestión de Dueños</h2>
-                        <p className="text-slate-600 dark:text-slate-400 text-sm">Administra la información de contacto de los clientes</p>
+                        <h2 className="text-3xl font-bold text-summer-lime">
+                            Gestión de Dueños
+                        </h2>
+                        <p className="text-summer-brown/70 dark:text-summer-beige text-sm font-medium">
+                            Administra la información de contacto de los clientes
+                        </p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    {/* COLUMNA IZQUIERDA: FORMULARIO DE REGISTRO */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-6 flex items-center gap-2">
+                        <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl border border-summer-beige dark:border-zinc-800 shadow-sm">
+                            <h3 className="text-sm font-bold uppercase tracking-wider text-summer-brown dark:text-summer-beige mb-6 flex items-center gap-2">
                                 <span className="material-icons-round text-xs">add_circle</span>
                                 Nuevo Registro
                             </h3>
                             <form onSubmit={handleRegister} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Nombre Completo</label>
+                                    <label className="block text-sm font-bold mb-1.5 ml-1 text-summer-brown dark:text-summer-beige">Nombre Completo</label>
                                     <input
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
+                                        className="w-full px-4 py-2.5 bg-summer-beige/10 dark:bg-zinc-800 border border-summer-beige/50 rounded-xl focus:ring-2 focus:ring-summer-lime/30 outline-none transition-all text-summer-brown dark:text-bone"
                                         placeholder="Ej: Juan Pérez"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
@@ -89,10 +110,10 @@ const OwnersPage = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Email</label>
+                                    <label className="block text-sm font-bold mb-1.5 ml-1 text-summer-brown dark:text-summer-beige">Email</label>
                                     <input
                                         type="email"
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
+                                        className="w-full px-4 py-2.5 bg-summer-beige/10 dark:bg-zinc-800 border border-summer-beige/50 rounded-xl focus:ring-2 focus:ring-summer-lime/30 outline-none transition-all text-summer-brown dark:text-bone"
                                         placeholder="juan@correo.com"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
@@ -100,9 +121,9 @@ const OwnersPage = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Teléfono</label>
+                                    <label className="block text-sm font-bold mb-1.5 ml-1 text-summer-brown dark:text-summer-beige">Teléfono</label>
                                     <input
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
+                                        className="w-full px-4 py-2.5 bg-summer-beige/10 dark:bg-zinc-800 border border-summer-beige/50 rounded-xl focus:ring-2 focus:ring-summer-lime/30 outline-none transition-all text-summer-brown dark:text-bone"
                                         placeholder="+56 9..."
                                         value={telephone}
                                         onChange={(e) => setTelephone(e.target.value)}
@@ -110,7 +131,7 @@ const OwnersPage = () => {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-full bg-primary hover:opacity-90 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 mt-2"
+                                    className="w-full bg-summer-lime hover:brightness-110 text-summer-brown font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 mt-2"
                                 >
                                     <span className="material-icons-round text-sm">add</span>
                                     Registrar Dueño
@@ -119,65 +140,82 @@ const OwnersPage = () => {
                         </div>
                     </div>
 
+                    {/* COLUMNA DERECHA: TABLA DE LISTADO */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-brandCream-dark dark:border-slate-800 shadow-sm overflow-hidden">
-                            <div className="p-6 border-b border-brandCream-dark dark:border-slate-800">
-                                <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Listado de Dueños</h3>
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-summer-beige dark:border-zinc-800 shadow-sm overflow-hidden">
+                            <div className="p-6 border-b border-summer-beige dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <h3 className="text-sm font-bold uppercase text-summer-brown dark:text-summer-beige">Listado de Dueños</h3>
+                                <div className="relative w-full md:w-64">
+                                    <span className="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-summer-beige text-sm">search</span>
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar por nombre o mail..."
+                                        className="w-full pl-9 pr-4 py-2 bg-summer-beige/5 dark:bg-zinc-800 border border-summer-beige rounded-xl text-sm focus:ring-2 focus:ring-summer-cyan/30 text-summer-brown dark:text-bone outline-none transition-all"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                </div>
                             </div>
+
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left">
-                                    <thead className="bg-slate-50 dark:bg-slate-800/50">
-                                        <tr>
-                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Nombre</th>
-                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email / Teléfono</th>
-                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">Acciones</th>
+                                    <thead>
+                                        <tr className="bg-summer-beige/10 dark:bg-zinc-800/50">
+                                            <th className="px-6 py-4 text-xs font-bold uppercase text-summer-brown dark:text-summer-beige">Dueño</th>
+                                            <th className="px-6 py-4 text-xs font-bold uppercase text-summer-brown dark:text-summer-beige">Contacto</th>
+                                            <th className="px-6 py-4 text-xs font-bold uppercase text-summer-brown dark:text-summer-beige text-right">Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                        {isLoading ? (
-                                            <tr><td colSpan={3} className="px-6 py-10 text-center text-slate-400 italic">Cargando dueños...</td></tr>
-                                        ) : !Array.isArray(owners) || owners.length === 0 ? (
-                                            <tr><td colSpan={3} className="px-6 py-10 text-center text-slate-400 italic">No hay dueños registrados.</td></tr>
-                                        ) : (
-                                            owners.map((owner) => (
-                                                <tr key={owner._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
-                                                    <td className="px-6 py-4">
-                                                        <span className="font-semibold text-slate-700 dark:text-slate-200">{owner.name}</span>
-                                                    </td>
-                                                    <td className="px-6 py-4">
-                                                        <div className="text-sm">
-                                                            <div className="text-slate-900 dark:text-slate-100 font-medium">{owner.email}</div>
-                                                            <div className="text-slate-500 dark:text-slate-400">{owner.telephone || 'Sin teléfono'}</div>
+                                    <tbody className="divide-y divide-summer-beige/30 dark:divide-zinc-800">
+                                        {filteredOwners.map((owner) => (
+                                            <tr key={owner._id} className="hover:bg-summer-cyan/5 transition-colors group">
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 rounded-full bg-summer-cyan/20 flex items-center justify-center text-summer-cyan font-bold text-xs">
+                                                            {owner.name.charAt(0)}
                                                         </div>
-                                                    </td>
-                                                    <td className="px-6 py-4 text-right">
-                                                        <div className="flex justify-end gap-2">
-                                                            <button
-                                                                onClick={() => setEditingOwner(owner)}
-                                                                className="p-2 text-slate-400 hover:text-brandTeal hover:bg-brandTeal/10 rounded-lg transition-all"
-                                                                title="Editar"
-                                                            >
-                                                                <span className="material-icons-round text-sm">edit</span>
-                                                            </button>
-                                                            <button
-                                                                onClick={() => handleDeleteOwner(owner._id)}
-                                                                className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-                                                                title="Eliminar"
-                                                            >
-                                                                <span className="material-icons-round text-sm">delete</span>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        )}
+                                                        <span className="font-bold text-summer-brown dark:text-bone">{owner.name}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex flex-col text-sm">
+                                                        <span className="text-summer-brown/80 dark:text-summer-beige">{owner.email}</span>
+                                                        <span className="text-summer-brown/50 dark:text-summer-beige/50 italic">{owner.telephone || 'Sin teléfono'}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <div className="flex justify-end gap-2 transition-opacity">
+                                                        <button
+                                                            onClick={() => setEditingOwner(owner)}
+                                                            className="p-2 text-summer-cyan hover:bg-summer-cyan/10 rounded-lg transition-colors"
+                                                            title="Editar"
+                                                        >
+                                                            <span className="material-icons-round text-lg">edit</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteOwner(owner._id)}
+                                                            className="p-2 text-summer-orange hover:bg-summer-orange/10 rounded-lg transition-colors"
+                                                            title="Eliminar"
+                                                        >
+                                                            <span className="material-icons-round text-lg">delete</span>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
+                                {filteredOwners.length === 0 && !isLoading && (
+                                    <div className="p-12 text-center text-summer-beige italic">
+                                        No se encontraron resultados para "{searchTerm}"
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             {editingOwner && (
                 <EditOwnerModal
                     owner={editingOwner}

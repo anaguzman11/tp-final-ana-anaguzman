@@ -1,19 +1,18 @@
 import { Request, Response } from 'express';
 import HistorialClinico from '../models/historialClinico.model';
 import Pet from '../models/pet.model';
-import { JwtPayload } from '../types/auth';
+import { JwtPayload, UserRole } from '../types/auth';
 
+//CREAR HISTORIAL CLÍNICO
 export const createHistorialClinico = async (req: Request, res: Response) => {
     try {
         const { petId, reason, description } = req.body;
         const user = (req as any).user as JwtPayload;
 
-        // Verificar que la mascota existe y pertenece al usuario (o el usuario es admin/veterinario)
         const pet = await Pet.findById(petId);
         if (!pet) {
             return res.status(404).json({ error: "Mascota no encontrada" });
         }
-
 
         const newRecord = new HistorialClinico({
             pet: petId,
@@ -30,17 +29,20 @@ export const createHistorialClinico = async (req: Request, res: Response) => {
     }
 };
 
+//BUSCAR POR MASCOTA
 export const getHistorialClinicoByPet = async (req: Request, res: Response) => {
     try {
         const { petId } = req.params;
-        const user = (req as any).user as JwtPayload;
 
         const pet = await Pet.findById(petId);
         if (!pet) {
             return res.status(404).json({ error: "Mascota no encontrada" });
         }
 
-        const records = await HistorialClinico.find({ pet: petId }).sort({ date: -1 }).populate('veterinarian', 'name');
+        const records = await HistorialClinico.find({ pet: petId })
+            .sort({ date: -1 })
+            .populate('veterinarian', 'name');
+
         return res.json(records);
     } catch (error) {
         console.error(error);
@@ -48,13 +50,14 @@ export const getHistorialClinicoByPet = async (req: Request, res: Response) => {
     }
 };
 
+//VER TODOS LOS HISTORIALES CLÍNICOS
 export const getAllHistorialClinico = async (req: Request, res: Response) => {
     try {
         const user = (req as any).user as JwtPayload;
 
-        // Solo veterinarios o admins pueden ver todos los registros
-        {
-            return res.status(403).json({ error: "Acceso denegado" });
+        // Validación de roles
+        if (user.role !== UserRole.ADMIN && user.role !== UserRole.VETERINARIAN) {
+            return res.status(403).json({ error: "Acceso denegado: Se requiere rol de Admin o Veterinario" });
         }
 
         const records = await HistorialClinico.find()

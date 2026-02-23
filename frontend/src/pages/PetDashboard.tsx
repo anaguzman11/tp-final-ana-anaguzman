@@ -30,6 +30,7 @@ const PetDashboard = () => {
     const [selectedPet, setSelectedPet] = useState<{ id: string, name: string } | null>(null);
     const [editingPet, setEditingPet] = useState<Pet | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const fetchPets = async () => {
         setIsLoading(true);
@@ -79,38 +80,47 @@ const PetDashboard = () => {
                 await api.delete(`/pets/${id}`);
                 fetchPets();
             } catch (error) {
-                alert("No se pudo eliminar: " + (error as any).response?.data?.error || "Error desconocido");
+                alert("No se pudo eliminar la mascota.");
             }
         }
     };
 
+    const filteredPets = Array.isArray(pets) ? pets.filter(pet =>
+        pet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pet.species.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pet.breed.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (pet.owner?.name && pet.owner.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    ) : [];
+
     return (
         <DashboardLayout>
             <div className="space-y-8 animate-in fade-in duration-500">
-                {/* Header Section */}
+
+                {/* CABECERA UNIFICADA EN VERDE LIMA */}
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-brandTeal/10 dark:bg-brandGreen/10 rounded-2xl">
-                        <span className="material-icons-round text-brandTeal dark:text-brandGreen text-2xl">auto_stories</span>
+                    <div className="p-3 bg-summer-lime/20 rounded-2xl">
+                        <span className="material-icons-round text-summer-lime text-2xl">auto_stories</span>
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-[#2C5F5D] dark:text-white">Gestión de Mascotas</h2>
-                        <p className="text-slate-600 dark:text-slate-400 text-sm">Administra y registra los pacientes de la clínica</p>
+                        <h2 className="text-3xl font-bold text-summer-lime">Gestión de Mascotas</h2>
+                        <p className="text-summer-brown/70 dark:text-summer-beige text-sm font-medium">Administra y registra los pacientes de la clínica</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Form Section */}
+
+                    {/* FORMULARIO DE REGISTRO - ESTILO SUMMER */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-brandCream-dark dark:border-slate-800 shadow-sm sticky top-8">
-                            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-6 flex items-center gap-2">
+                        <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl border border-summer-beige dark:border-zinc-800 shadow-sm sticky top-8">
+                            <h3 className="text-sm font-bold uppercase tracking-wider text-summer-brown dark:text-summer-beige mb-6 flex items-center gap-2">
                                 <span className="material-icons-round text-xs">add_circle</span>
                                 Nuevo Registro
                             </h3>
                             <form onSubmit={handleAddPet} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Nombre</label>
+                                    <label className="block text-sm font-bold mb-1.5 ml-1 text-summer-brown dark:text-summer-beige">Nombre</label>
                                     <input
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-900 dark:text-white"
+                                        className="w-full px-4 py-2.5 bg-summer-beige/10 dark:bg-zinc-800 border border-summer-beige/50 rounded-xl focus:ring-2 focus:ring-summer-lime/30 outline-none text-summer-brown dark:text-bone transition-all"
                                         placeholder="Ej: Firulais"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
@@ -118,9 +128,9 @@ const PetDashboard = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Especie</label>
+                                    <label className="block text-sm font-bold mb-1.5 ml-1 text-summer-brown dark:text-summer-beige">Especie</label>
                                     <select
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all appearance-none text-slate-900 dark:text-white"
+                                        className="w-full px-4 py-2.5 bg-summer-beige/10 dark:bg-zinc-800 border border-summer-beige/50 rounded-xl focus:ring-2 focus:ring-summer-lime/30 outline-none text-summer-brown dark:text-bone transition-all"
                                         value={species}
                                         onChange={(e) => setSpecies(e.target.value)}
                                     >
@@ -131,18 +141,9 @@ const PetDashboard = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Raza</label>
-                                    <input
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-900 dark:text-white"
-                                        placeholder="Ej: Labrador"
-                                        value={breed}
-                                        onChange={(e) => setBreed(e.target.value)}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Dueño Responsable</label>
+                                    <label className="block text-sm font-bold mb-1.5 ml-1 text-summer-brown dark:text-summer-beige">Dueño Responsable</label>
                                     <select
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
+                                        className="w-full px-4 py-2.5 bg-summer-beige/10 dark:bg-zinc-800 border border-summer-beige/50 rounded-xl focus:ring-2 focus:ring-summer-lime/30 outline-none text-summer-brown dark:text-bone transition-all"
                                         value={selectedOwner}
                                         onChange={(e) => setSelectedOwner(e.target.value)}
                                         required
@@ -156,112 +157,106 @@ const PetDashboard = () => {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full bg-primary hover:opacity-90 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 mt-2"
+                                    className="w-full bg-summer-lime hover:brightness-110 text-summer-brown font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
                                 >
-                                    {isSubmitting ? (
-                                        <span className="material-icons-round animate-spin text-sm">sync</span>
-                                    ) : (
-                                        <span className="material-icons-round text-sm">save</span>
-                                    )}
-                                    Guardar Mascota
+                                    <span className="material-icons-round text-sm">add</span>
+                                    {isSubmitting ? 'Registrando...' : 'Registrar Mascota'}
                                 </button>
                             </form>
                         </div>
                     </div>
 
-                    {/* List Section */}
+                    {/* LISTADO DE MASCOTAS CON BUSCADOR */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-brandCream-dark dark:border-slate-800 shadow-sm overflow-hidden">
-                            <div className="p-6 border-b border-brandCream-dark dark:border-slate-800 flex justify-between items-center">
-                                <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Listado de Mascotas</h3>
-                                <span className="px-3 py-1 bg-brandTeal/10 text-brandTeal text-xs font-bold rounded-full">
-                                    {pets.length} Registros
-                                </span>
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-summer-beige dark:border-zinc-800 shadow-sm overflow-hidden">
+                            <div className="p-6 border-b border-summer-beige dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <h3 className="text-sm font-bold uppercase text-summer-brown dark:text-summer-beige">Pacientes Registrados</h3>
+                                <div className="relative w-full md:w-64">
+                                    <span className="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-summer-beige text-sm">search</span>
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar por nombre, dueño..."
+                                        className="w-full pl-9 pr-4 py-2 bg-summer-beige/5 dark:bg-zinc-800 border border-summer-beige rounded-xl text-sm focus:ring-2 focus:ring-summer-cyan/30 text-summer-brown dark:text-bone outline-none transition-all"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                </div>
                             </div>
+
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left">
-                                    <thead className="bg-slate-50 dark:bg-slate-800/50">
-                                        <tr>
-                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mascota</th>
-                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Especie / Raza</th>
-                                            <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">Acciones</th>
+                                    <thead>
+                                        <tr className="bg-summer-beige/10 dark:bg-zinc-800/50">
+                                            <th className="px-6 py-4 text-xs font-bold uppercase text-summer-brown dark:text-summer-beige">Mascota</th>
+                                            <th className="px-6 py-4 text-xs font-bold uppercase text-summer-brown dark:text-summer-beige">Dueño</th>
+                                            <th className="px-6 py-4 text-xs font-bold uppercase text-summer-brown dark:text-summer-beige">Info</th>
+                                            <th className="px-6 py-4 text-xs font-bold uppercase text-summer-brown dark:text-summer-beige text-right">Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                        {isLoading ? (
-                                            <tr>
-                                                <td colSpan={3} className="px-6 py-10 text-center text-slate-400">
-                                                    <div className="flex flex-col items-center gap-2">
-                                                        <span className="material-icons-round animate-spin">sync</span>
-                                                        <span>Cargando mascotas...</span>
+                                    <tbody className="divide-y divide-summer-beige/30 dark:divide-zinc-800">
+                                        {filteredPets.map((pet) => (
+                                            <tr key={pet._id} className="hover:bg-summer-cyan/5 transition-colors group">
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-10 h-10 rounded-xl bg-summer-lime/10 flex items-center justify-center text-summer-lime">
+                                                            <span className="material-icons-round text-xl">
+                                                                {pet.species === 'Dog' ? 'pets' : pet.species === 'Cat' ? 'savings' : 'flutter_dash'}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="font-bold text-summer-brown dark:text-bone">{pet.name}</span>
+                                                            <span className="text-xs text-summer-brown/50 dark:text-summer-beige/50 italic">{pet.breed}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 text-sm font-medium text-summer-brown/80 dark:text-summer-beige">
+                                                    {pet.owner?.name || 'S/D'}
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className="px-2.5 py-1 rounded-full bg-summer-cyan/10 text-summer-cyan text-xs font-bold">
+                                                        {pet.age} años
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <div className="flex justify-end gap-1 transition-opacity">
+                                                        <button
+                                                            onClick={() => setSelectedPet({ id: pet._id, name: pet.name })}
+                                                            className="p-2 text-summer-cyan hover:bg-summer-cyan/10 rounded-lg transition-colors"
+                                                            title="Ver Historial"
+                                                        >
+                                                            <span className="material-icons-round text-lg">history</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setEditingPet(pet)}
+                                                            className="p-2 text-summer-brown hover:bg-summer-brown/10 rounded-lg transition-colors"
+                                                            title="Editar"
+                                                        >
+                                                            <span className="material-icons-round text-lg">edit</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(pet._id)}
+                                                            className="p-2 text-summer-orange hover:bg-summer-orange/10 rounded-lg transition-colors"
+                                                            title="Eliminar"
+                                                        >
+                                                            <span className="material-icons-round text-lg">delete</span>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        ) : pets.length === 0 ? (
-                                            <tr>
-                                                <td colSpan={3} className="px-6 py-10 text-center text-slate-400 italic">
-                                                    No hay mascotas registradas aún.
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            pets.map((pet) => (
-                                                <tr key={pet._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors group">
-                                                    <td className="px-6 py-4">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-white transition-all">
-                                                                <span className="material-icons-round text-xl">pets</span>
-                                                            </div>
-                                                            <span className="font-semibold text-slate-700 dark:text-slate-200">{pet.name}</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="px-6 py-4">
-                                                        <div className="text-sm">
-                                                            <span className="text-slate-900 dark:text-slate-100 font-medium">{pet.species}</span>
-                                                            <span className="text-slate-500 dark:text-slate-400 ml-2">({pet.breed})</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="px-6 py-4 text-right">
-                                                        <div className="flex justify-end gap-2">
-                                                            <button
-                                                                onClick={() => setSelectedPet({ id: pet._id, name: pet.name })}
-                                                                className="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
-                                                                title="Historia Clínica"
-                                                            >
-                                                                <span className="material-icons-round text-sm">history_edu</span>
-                                                            </button>
-                                                            <button
-                                                                onClick={() => setEditingPet(pet)}
-                                                                className="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
-                                                                title="Editar"
-                                                            >
-                                                                <span className="material-icons-round text-sm">edit</span>
-                                                            </button>
-                                                            <button
-                                                                onClick={() => handleDelete(pet._id)}
-                                                                className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-                                                                title="Eliminar"
-                                                            >
-                                                                <span className="material-icons-round text-sm">delete</span>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        )}
+                                        ))}
                                     </tbody>
                                 </table>
+                                {filteredPets.length === 0 && !isLoading && (
+                                    <div className="p-12 text-center text-summer-beige italic">
+                                        No se encontraron mascotas registradas.
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {editingPet && (
-                <EditPetModal
-                    pet={editingPet}
-                    onClose={() => setEditingPet(null)}
-                    onUpdate={fetchPets}
-                />
-            )}
+
             {selectedPet && (
                 <PetHistoryModal
                     petId={selectedPet.id}
@@ -269,9 +264,15 @@ const PetDashboard = () => {
                     onClose={() => setSelectedPet(null)}
                 />
             )}
+            {editingPet && (
+                <EditPetModal
+                    pet={editingPet}
+                    onClose={() => setEditingPet(null)}
+                    onUpdate={fetchPets}
+                />
+            )}
         </DashboardLayout>
     );
 };
 
 export default PetDashboard;
-

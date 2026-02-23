@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import Pet from '../models/pet.model';
 import { validationResult } from 'express-validator';
-import { JwtPayload, UserRole } from '../types/auth'; // Importación unificada
+import { JwtPayload } from '../types/auth';
 
-// Función para REGISTRAR una nueva mascota
+// REGISTRAR una nueva mascota
 export const createPet = async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
@@ -14,8 +14,6 @@ export const createPet = async (req: Request, res: Response) => {
     const user = (req as any).user as JwtPayload;
     const { name, species, breed, age, owner } = req.body;
 
-    // Como solo hay admin, el owner siempre debería venir en el body 
-    // o ser el admin mismo si se está asignando la mascota
     const finalOwnerId = owner || user.id;
 
     const newPet = new Pet({
@@ -35,10 +33,9 @@ export const createPet = async (req: Request, res: Response) => {
   }
 };
 
-// Función para LISTAR todas las mascotas (Ya no filtramos por cliente)
+// LISTAR todas las mascotas
 export const getMyPets = async (req: Request, res: Response) => {
   try {
-    // Al ser solo admins, mostramos todas las mascotas de la base de datos
     const pets = await Pet.find({}).populate('owner', 'name email');
     return res.json(pets);
   } catch (error) {
@@ -47,12 +44,10 @@ export const getMyPets = async (req: Request, res: Response) => {
   }
 };
 
-// Función para OBTENER los detalles de una mascota específica por su ID
+// OBTENER los detalles de una mascota por su ID
 export const getPetById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-
-    // Buscamos directamente por ID sin restringir por owner
     const pet = await Pet.findById(id).populate('owner', 'name email');
 
     if (!pet) {
@@ -65,7 +60,7 @@ export const getPetById = async (req: Request, res: Response) => {
   }
 };
 
-// FUNCIÓN PARA ACTUALIZAR UNA MASCOTA
+// ACTUALIZAR UNA MASCOTA
 export const updatePet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -92,12 +87,10 @@ export const updatePet = async (req: Request, res: Response) => {
   }
 };
 
-// FUNCIÓN PARA ELIMINAR UNA MASCOTA
+// ELIMINAR UNA MASCOTA
 export const deletePet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-
-    // El admin puede borrar cualquier mascota
     const deletedPet = await Pet.findByIdAndDelete(id);
 
     if (!deletedPet) {

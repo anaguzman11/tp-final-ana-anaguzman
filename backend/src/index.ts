@@ -4,7 +4,7 @@ dns.setServers(['1.1.1.1', '8.8.8.8']);
 
 import express, { Request, Response } from "express";
 import path from "path";
-import cors from 'cors'; // Importado
+import cors from 'cors';
 import mongoose from "mongoose";
 import petsRoutes from './routes/pets.routes';
 import authRoutes from "./routes/auth.routes";

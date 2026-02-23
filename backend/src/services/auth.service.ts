@@ -11,16 +11,13 @@ if (!process.env.JWT_SECRET) {
 const secretKey: string = process.env.JWT_SECRET;
 
 export const seedAdmin = async () => {
-  // 1. Borramos el admin viejo que tiene la contraseña "rota"
+
   await User.deleteOne({ email: 'admin@admin.com' });
 
-  // 2. Creamos el nuevo. 
-  // IMPORTANTE: Si tu modelo tiene bcrypt.hash en el .pre('save'), 
-  // mandá la contraseña en TEXTO PLANO acá.
   const admin = new User({
     name: 'Administrador',
     email: 'admin@admin.com',
-    password: 'admin1234', // Texto plano para que el modelo lo encripte UNA SOLA VEZ
+    password: 'admin1234',
     role: 'admin'
   });
 
@@ -35,13 +32,13 @@ export const register = async (
   name: string,
   email: string,
   password: string,
-  role: UserRole = UserRole.VETERINARIAN, // Enum para el valor por defecto
+  role: UserRole = UserRole.VETERINARIAN,
   telephone?: string
 ): Promise<string> => {
   const newUser = new User({
     name,
     email,
-    password, // El hook del modelo lo hasheará
+    password,
     role,
     telephone,
   });

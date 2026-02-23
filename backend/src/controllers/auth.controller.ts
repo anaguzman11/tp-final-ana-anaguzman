@@ -37,7 +37,7 @@ export const updateUser = async (req: Request, res: Response) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    // ✅ Buscamos, actualizamos y EXCLUIMOS la contraseña en un solo paso
+    // Buscamos, actualizamos y excluimos la contraseña
     const updatedUser = await User.findByIdAndUpdate(
       id,
       updateData,
@@ -88,7 +88,7 @@ export const login = async (req: Request, res: Response) => {
 // PARA ELIMINAR USUARIO
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params; // Obtenemos el ID de la URL
+    const { id } = req.params;
 
     // Buscamos y eliminamos el usuario
     const deletedUser = await User.findByIdAndDelete(id);
@@ -97,7 +97,7 @@ export const deleteUser = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    // Respuesta de éxito (200 OK)
+
     return res.json({
       message: "Usuario eliminado correctamente",
       user: deletedUser

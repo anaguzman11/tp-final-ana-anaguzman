@@ -14,7 +14,7 @@ const router = Router();
 // Todas las rutas de abajo requieren estar logueado
 router.use(authenticate);
 
-// POST /api/pets/register: Registrar una nueva mascota
+// POST-->Registrar una nueva mascota
 router.post(
   '/register',
   [
@@ -26,13 +26,13 @@ router.post(
   createPet
 );
 
-// GET /api/pets/my: Listar las mascotas del usuario autenticado
+// GET /api/pets/my---> Listar las mascotas del usuario autenticado
 router.get('/my', getMyPets);
 
-// GET /api/pets/:id : Obtener una sola mascota por ID
+// GET /api/pets/:id ---> Obtener una sola mascota por ID
 router.get('/:id', getPetById);
 
-// PUT /api/pets/:id : Actualizar una mascota
+// PUT /api/pets/:id ---> Actualizar una mascota
 router.put('/:id',
   [
     body('name').optional().notEmpty().withMessage('El nombre no puede estar vacío'),
@@ -41,7 +41,7 @@ router.put('/:id',
   updatePet
 );
 
-// DELETE /api/pets/:id : Eliminar una mascota
+// DELETE /api/pets/:id ---> Eliminar una mascota
 router.delete('/:id', deletePet);
 
 export default router;

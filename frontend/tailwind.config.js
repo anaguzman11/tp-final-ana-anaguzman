@@ -13,6 +13,10 @@ export default {
                 mary: '#FFAA3B',
                 hope: '#FF8A02',
                 bone: '#FFF5F4',
+                brandTeal: '#2C5F5D',
+                brandCream: '#F2ECE4',
+                'brandCream-dark': '#E5DDD3',
+                brandGreen: '#4ADE80',
 
                 // Mapeo de primarios/secundarios para que el resto de la app se actualice
                 primary: '#4F79FF',   // Bluby como primario

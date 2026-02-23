@@ -1,28 +1,60 @@
 @import "tailwindcss";
 
 @theme {
-    /* Colores de la nueva paleta */
-    --color-bluby: #4F79FF;
-    --color-mary: #FFAA3B;
-    --color-hope: #FF8A02;
-    --color-bone: #FFF5F4;
+    /* Colores extraídos de tu imagen */
+    --color-summer-brown: #7D5D3B;
+    /* Marrón oscuro */
+    --color-summer-beige: #C9B2A6;
+    /* Beige rosado */
+    --color-summer-lime: #B5D334;
+    /* Verde lima vibrante (TU NUEVO VERDE) */
+    --color-summer-cyan: #81D3D3;
+    /* Celeste/Cian suave */
+    --color-summer-orange: #D97A20;
+    /* Naranja tierra */
 
-    /* Mapeo de colores semánticos (para no cambiar cada componente) */
-    --color-primary: var(--color-bluby);
-    --color-secondary: var(--color-hope);
-    --color-accent: var(--color-mary);
-    --color-background-soft: var(--color-bone);
+    /* Colores base para fondos */
+    --color-bone: #FFF5F4;
+    --color-dark-bg: #1A1A1A;
+
+    /* Mapeo Semántico - AJUSTADO PARA MODO CLARO/OSCURO */
+    --color-primary: var(--color-summer-lime);
+    /* Verde para el H2 */
+    --color-secondary: var(--color-summer-cyan);
+    --color-accent: var(--color-summer-orange);
 
     /* Tipografía */
     --font-plus-jakarta: "Plus Jakarta Sans", "Inter", sans-serif;
-
-    /* Actualizamos la sombra para que use el nuevo tono Hope/Mary si lo deseas */
-    --shadow-brand: 0 10px 15px -3px rgba(255, 138, 2, 0.1), 0 4px 6px -2px rgba(255, 138, 2, 0.05);
 }
 
 @layer base {
+
+    /* CONFIGURACIÓN GLOBAL DE COLORES */
     body {
-        @apply font-plus-jakarta bg-bone;
-        /* Aplicamos Bone como fondo base */
+        font-family: var(--font-plus-jakarta);
+        /* Fondo claro por defecto, fondo oscuro en modo dark */
+        background-color: var(--color-bone);
+        color: var(--color-summer-brown);
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Forzar que los H2 sean siempre el VERDE de la imagen */
+    h2 {
+        color: var(--color-summer-lime) !important;
+        font-weight: 700;
+    }
+
+    /* Ajustes para Modo Oscuro nativo de Tailwind */
+    @media (prefers-color-scheme: dark) {
+        body {
+            background-color: var(--color-dark-bg);
+            color: var(--color-bone);
+        }
+
+        /* En modo oscuro, el verde puede brillar un poco más */
+        h2 {
+            color: var(--color-summer-lime);
+            text-shadow: 0 0 10px rgba(181, 211, 52, 0.2);
+        }
     }
 }

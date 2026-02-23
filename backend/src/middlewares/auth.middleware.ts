@@ -8,7 +8,6 @@ if (!process.env.JWT_SECRET) {
 
 const secretKey: string = process.env.JWT_SECRET;
 
-// Middleware genérico para verificar que el token JWT sea valido
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
 

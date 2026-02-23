@@ -24,7 +24,7 @@ router.post(
 router.post(
   '/login',
   [
-    // Validación básica de login
+    // Validación basica de login
     body('email').isEmail().withMessage('El email debe ser válido'),
     body('password').notEmpty().withMessage('La contraseña es requerida'),
   ],
@@ -44,8 +44,6 @@ router.put(
 
 // ruta para eliminar usuario
 router.delete('/delete/:id', authenticate, authorize(UserRole.ADMIN, UserRole.VETERINARIAN), deleteUser);
-
-
 
 // Ruta para obtener todos los clientes
 router.get('/clients', authenticate, getAllClients);

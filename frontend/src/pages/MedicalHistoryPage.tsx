@@ -24,6 +24,7 @@ const MedicalHistoryPage = () => {
     const [reason, setReason] = useState('');
     const [description, setDescription] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const fetchData = async () => {
         setIsLoading(true);
@@ -57,27 +58,40 @@ const MedicalHistoryPage = () => {
         }
     };
 
+    const filteredRecords = Array.isArray(records) ? records.filter(record =>
+        (record.pet?.name && record.pet.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        record.reason.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (record.veterinarian?.name && record.veterinarian.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    ) : [];
+
     return (
         <DashboardLayout>
             <div className="space-y-8 animate-in fade-in duration-500">
+
+                {/* CABECERA UNIFICADA */}
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-brandTeal/10 dark:bg-brandGreen/10 rounded-2xl">
-                        <span className="material-icons-round text-brandTeal dark:text-brandGreen text-2xl">history_edu</span>
+                    <div className="p-3 bg-summer-lime/20 rounded-2xl">
+                        <span className="material-icons-round text-summer-lime text-2xl">history_edu</span>
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-[#2C5F5D] dark:text-white">Historial Clínico</h2>
-                        <p className="text-slate-600 dark:text-slate-400 text-sm">Registro centralizado de atenciones y diagnósticos</p>
+                        <h2 className="text-3xl font-bold text-summer-lime">Historial Clínico</h2>
+                        <p className="text-summer-brown/70 dark:text-summer-beige text-sm font-medium">Registro centralizado de atenciones y diagnósticos</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-8">
-                    <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-6">Nueva Entrada Clínica</h3>
+                    {/* FORMULARIO DE NUEVA ENTRADA - FONDO IGUAL AL ASIDE */}
+                    <div className="bg-zinc-900 p-6 rounded-3xl border border-zinc-800 shadow-sm">
+                        <h3 className="text-sm font-bold uppercase tracking-wider text-summer-beige mb-6 flex items-center gap-2">
+                            <span className="material-icons-round text-xs">add_circle</span>
+                            Nueva Entrada Clínica
+                        </h3>
                         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Mascota</label>
+                                <label className="block text-sm font-bold mb-1.5 ml-1 text-summer-beige">Mascota</label>
                                 <select
-                                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
+                                    className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl focus:ring-2 focus:ring-summer-lime/30 outline-none transition-all text-bone"
                                     value={selectedPet}
                                     onChange={(e) => setSelectedPet(e.target.value)}
                                     required
@@ -89,9 +103,9 @@ const MedicalHistoryPage = () => {
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Motivo de Visita</label>
+                                <label className="block text-sm font-bold mb-1.5 ml-1 text-summer-beige">Motivo de Visita</label>
                                 <input
-                                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white"
+                                    className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl focus:ring-2 focus:ring-summer-lime/30 outline-none transition-all text-bone placeholder:text-zinc-500"
                                     placeholder="Ej: Control, Vacuna, etc."
                                     value={reason}
                                     onChange={(e) => setReason(e.target.value)}
@@ -99,9 +113,9 @@ const MedicalHistoryPage = () => {
                                 />
                             </div>
                             <div className="md:col-span-2">
-                                <label className="block text-sm font-medium mb-1.5 ml-1 text-slate-700 dark:text-slate-300">Observaciones y Tratamiento</label>
+                                <label className="block text-sm font-bold mb-1.5 ml-1 text-summer-beige">Observaciones y Tratamiento</label>
                                 <textarea
-                                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-900 dark:text-white resize-none"
+                                    className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl focus:ring-2 focus:ring-summer-lime/30 outline-none transition-all text-bone resize-none placeholder:text-zinc-500"
                                     rows={3}
                                     placeholder="Detalle el diagnóstico..."
                                     value={description}
@@ -110,7 +124,7 @@ const MedicalHistoryPage = () => {
                                 />
                             </div>
                             <div className="md:col-span-2 flex justify-end">
-                                <button type="submit" className="bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity flex items-center gap-2">
+                                <button type="submit" className="bg-summer-lime text-summer-brown px-8 py-3 rounded-xl font-bold hover:brightness-110 shadow-md transition-all flex items-center gap-2">
                                     <span className="material-icons-round text-sm">save</span>
                                     Guardar Entrada
                                 </button>
@@ -118,37 +132,60 @@ const MedicalHistoryPage = () => {
                         </form>
                     </div>
 
-                    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-brandCream-dark dark:border-slate-800 shadow-sm overflow-hidden">
-                        <div className="p-6 border-b border-brandCream-dark dark:border-slate-800">
-                            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Registros Recientes</h3>
+                    {/* TABLA DE REGISTROS CON FONDO IGUAL AL ASIDE */}
+                    <div className="bg-zinc-900 rounded-3xl border border-zinc-800 shadow-sm overflow-hidden">
+                        <div className="p-6 border-b border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <h3 className="text-sm font-bold uppercase text-summer-beige">Listado de Atenciones</h3>
+                            <div className="relative w-full md:w-64">
+                                <span className="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-sm">search</span>
+                                <input
+                                    type="text"
+                                    placeholder="Buscar por mascota o motivo..."
+                                    className="w-full pl-9 pr-4 py-2 bg-zinc-800 border border-zinc-700 rounded-xl text-sm focus:ring-2 focus:ring-summer-cyan/30 text-bone outline-none transition-all placeholder:text-zinc-500"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
                         </div>
                         <div className="overflow-x-auto">
-                            <table className="w-full text-left">
-                                <thead className="bg-slate-50 dark:bg-slate-800/50">
+                            <table className="w-full text-left border-collapse">
+                                <thead className="bg-zinc-800/50">
                                     <tr>
-                                        <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Fecha</th>
-                                        <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mascota</th>
-                                        <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Motivo</th>
-                                        <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Diagnóstico</th>
+                                        <th className="px-6 py-4 text-xs font-bold uppercase text-summer-beige">Mascota</th>
+                                        <th className="px-6 py-4 text-xs font-bold uppercase text-summer-beige">Motivo</th>
+                                        <th className="px-6 py-4 text-xs font-bold uppercase text-summer-beige">Veterinario</th>
+                                        <th className="px-6 py-4 text-xs font-bold uppercase text-summer-beige">Fecha</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                    {isLoading ? (
-                                        <tr><td colSpan={4} className="px-6 py-10 text-center text-slate-400 italic">Cargando registros...</td></tr>
-                                    ) : records.length === 0 ? (
-                                        <tr><td colSpan={4} className="px-6 py-10 text-center text-slate-400 italic">No hay registros recientes.</td></tr>
-                                    ) : (
-                                        records.map((record) => (
-                                            <tr key={record._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
-                                                <td className="px-6 py-4 text-sm text-slate-500">{new Date(record.date).toLocaleDateString()}</td>
-                                                <td className="px-6 py-4 font-semibold">{record.pet?.name || 'Mascota eliminada'}</td>
-                                                <td className="px-6 py-4 text-sm">{record.reason}</td>
-                                                <td className="px-6 py-4 text-sm italic text-slate-500 dark:text-slate-400">{record.description}</td>
-                                            </tr>
-                                        ))
-                                    )}
+                                <tbody className="divide-y divide-zinc-800">
+                                    {filteredRecords.map((record) => (
+                                        <tr key={record._id} className="hover:bg-summer-cyan/5 transition-colors group">
+                                            <td className="px-6 py-4">
+                                                <span className="font-bold text-bone">{record.pet?.name || 'Mascota eliminada'}</span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex flex-col">
+                                                    <span className="font-bold text-summer-beige">{record.reason}</span>
+                                                    <span className="text-xs text-zinc-400 line-clamp-1 italic">{record.description}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <span className="text-sm font-medium text-summer-cyan">{record.veterinarian?.name || 'Staff'}</span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <span className="text-sm text-zinc-500">
+                                                    {new Date(record.date).toLocaleDateString()}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
+                            {filteredRecords.length === 0 && !isLoading && (
+                                <div className="p-12 text-center text-zinc-600 italic">
+                                    No se encontraron registros clínicos.
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
