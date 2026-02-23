@@ -13,6 +13,9 @@ import { authenticate, authorize } from "./middlewares/auth.middleware";
 import { connectDB } from "./config/database";
 import { UserRole } from "./types/auth";
 import * as authService from './services/auth.service';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 
 const app = express();
@@ -73,3 +76,5 @@ connectDB().then(async () => {
 }).catch(err => {
   console.error("❌ Error fatal al iniciar el sistema:", err);
 });
+
+export default app;

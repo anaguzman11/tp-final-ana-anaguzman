@@ -1,9 +1,9 @@
 # Patitas Felices - Gestión Veterinaria 🐾
 
-Bienvenido a **Patitas Felices**, una aplicación integral para la administración de clínicas veterinarias. Este proyecto evolucionó a partir de nuestro **TP Intermedio**, transformándose en una plataforma completa con Frontend y Backend robustos.
+Bienvenido a **Patitas Felices**, una aplicación integral para la administración de clínicas veterinarias. Este proyecto evolucionó a partir de nuestro **TRABAJO PRÁCTICO INTERMEDIO**, transformándose en una plataforma completa con Frontend y Backend.
 
 ## 🚀 Evolución del Proyecto
-El proyecto comenzó como una base conceptual en el TP Intermedio. Con la ayuda de la automatización de **Antigravity** y la inspiración en el diseño de **Stitch**, logramos desarrollar una interfaz moderna ("Summer Theme") y una API escalable.
+El proyecto comenzó como una base conceptual en el **TRABAJO PRÁCTICO INTERMEDIO**. Con la ayuda de la automatización de **Antigravity** y la inspiración en el diseño de **Stitch**, logramos desarrollar una interfaz moderna ("Summer Theme") y una API escalable.
 
 ---
 
@@ -84,4 +84,4 @@ curl -X GET http://localhost:3000/api/medical-records/all \
 
 ## 👤 Autor
 Desarrollado por **Ana Guzmán**.
-*Proyecto Final de la Diplomatura en Desarrollo Web con Inteligencia Artificial.*
+*Trabajo Practico Final de la Diplomatura - BACKEND DEVELOPER.*
