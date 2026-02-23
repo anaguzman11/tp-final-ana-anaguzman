@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import Pet from '../models/pet.model';
 import { validationResult } from 'express-validator';
-import { JwtPayload } from '../types/auth';
+import { JwtPayload, UserRole } from '../types/auth'; // Importación unificada
 
-// Función para REGISTRAR una nueva mascota (solo para usuarios logeados)
+// Función para REGISTRAR una nueva mascota
 export const createPet = async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
@@ -13,7 +13,10 @@ export const createPet = async (req: Request, res: Response) => {
 
     const user = (req as any).user as JwtPayload;
     const { name, species, breed, age, owner } = req.body;
-    const finalOwnerId = owner || user.id; // Si viene owner en el body lo usamos, si no el del token
+
+    // Como solo hay admin, el owner siempre debería venir en el body 
+    // o ser el admin mismo si se está asignando la mascota
+    const finalOwnerId = owner || user.id;
 
     const newPet = new Pet({
       name,
@@ -32,18 +35,11 @@ export const createPet = async (req: Request, res: Response) => {
   }
 };
 
-// Función para LISTAR las mascotas de un usuario específico
+// Función para LISTAR todas las mascotas (Ya no filtramos por cliente)
 export const getMyPets = async (req: Request, res: Response) => {
   try {
-    const user = (req as any).user as JwtPayload;
-
-    let query = {};
-    // Si es cliente, solo ve las suyas. Si es admin o vet, ve todas.
-    if (user.role === 'client') {
-      query = { owner: user.id };
-    }
-
-    const pets = await Pet.find(query).populate('owner', 'name email');
+    // Al ser solo admins, mostramos todas las mascotas de la base de datos
+    const pets = await Pet.find({}).populate('owner', 'name email');
     return res.json(pets);
   } catch (error) {
     console.error(error);
@@ -55,17 +51,12 @@ export const getMyPets = async (req: Request, res: Response) => {
 export const getPetById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const user = (req as any).user as JwtPayload;
-    let query: any = { _id: id };
-    // Si es cliente, solo puede ver la suya. Si es admin/vet, ve cualquiera.
-    if (user.role === 'client') {
-      query.owner = user.id;
-    }
 
-    const pet = await Pet.findOne(query).populate('owner', 'name email');
+    // Buscamos directamente por ID sin restringir por owner
+    const pet = await Pet.findById(id).populate('owner', 'name email');
 
     if (!pet) {
-      return res.status(404).json({ error: "Mascota no encontrada o no te pertenece" });
+      return res.status(404).json({ error: "Mascota no encontrada" });
     }
     return res.json(pet);
   } catch (error) {
@@ -74,27 +65,21 @@ export const getPetById = async (req: Request, res: Response) => {
   }
 };
 
-// FUNCIÓN PARA ACTUALIZAR UNA MASCOTA (Solo si es el dueño)
+// FUNCIÓN PARA ACTUALIZAR UNA MASCOTA
 export const updatePet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
 
-    const user = (req as any).user as JwtPayload;
-
-    let query: any = { _id: id };
-    if (user.role === 'client') {
-      query.owner = user.id;
-    }
-
-    const updatedPet = await Pet.findOneAndUpdate(
-      query,
+    // El admin puede editar cualquier mascota
+    const updatedPet = await Pet.findByIdAndUpdate(
+      id,
       updateData,
       { new: true, runValidators: true }
     );
 
     if (!updatedPet) {
-      return res.status(404).json({ error: "Mascota no encontrada o no tienes permiso para editarla" });
+      return res.status(404).json({ error: "Mascota no encontrada" });
     }
 
     return res.json({
@@ -107,21 +92,16 @@ export const updatePet = async (req: Request, res: Response) => {
   }
 };
 
-// FUNCIÓN PARA ELIMINAR UNA MASCOTA (Solo si es el dueño)
+// FUNCIÓN PARA ELIMINAR UNA MASCOTA
 export const deletePet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const user = (req as any).user as JwtPayload;
 
-    let query: any = { _id: id };
-    if (user.role === 'client') {
-      query.owner = user.id;
-    }
-
-    const deletedPet = await Pet.findOneAndDelete(query);
+    // El admin puede borrar cualquier mascota
+    const deletedPet = await Pet.findByIdAndDelete(id);
 
     if (!deletedPet) {
-      return res.status(404).json({ error: "Mascota no encontrada o no tienes permiso para eliminarla" });
+      return res.status(404).json({ error: "Mascota no encontrada" });
     }
 
     return res.json({

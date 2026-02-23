@@ -14,10 +14,6 @@ export const createHistorialClinico = async (req: Request, res: Response) => {
             return res.status(404).json({ error: "Mascota no encontrada" });
         }
 
-        // Seguridad básica: solo el dueño o un admin/veterinario puede añadir registros
-        if (pet.owner.toString() !== user.id && user.role === 'client') {
-            return res.status(403).json({ error: "No tienes permiso para añadir registros a esta mascota" });
-        }
 
         const newRecord = new HistorialClinico({
             pet: petId,
@@ -44,11 +40,6 @@ export const getHistorialClinicoByPet = async (req: Request, res: Response) => {
             return res.status(404).json({ error: "Mascota no encontrada" });
         }
 
-        // Solo el dueño, veterinarios o admins pueden ver la historia clínica
-        if (pet.owner.toString() !== user.id && user.role === 'client') {
-            return res.status(403).json({ error: "No tienes permiso para ver la historia de esta mascota" });
-        }
-
         const records = await HistorialClinico.find({ pet: petId }).sort({ date: -1 }).populate('veterinarian', 'name');
         return res.json(records);
     } catch (error) {
@@ -62,7 +53,7 @@ export const getAllHistorialClinico = async (req: Request, res: Response) => {
         const user = (req as any).user as JwtPayload;
 
         // Solo veterinarios o admins pueden ver todos los registros
-        if (user.role === 'client') {
+        {
             return res.status(403).json({ error: "Acceso denegado" });
         }
 

@@ -8,11 +8,12 @@ import cors from 'cors'; // Importado
 import mongoose from "mongoose";
 import petsRoutes from './routes/pets.routes';
 import authRoutes from "./routes/auth.routes";
-import medicalRecordRoutes from "./routes/medicalRecord.routes";
+import historialCliniciRoutes from "./routes/historialClinico.routes";
 import { authenticate, authorize } from "./middlewares/auth.middleware";
 import { connectDB } from "./config/database";
 import { UserRole } from "./types/auth";
 import * as authService from './services/auth.service';
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -35,7 +36,7 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/pets', petsRoutes);
-app.use('/api/medical-records', medicalRecordRoutes);
+app.use('/api/medical-records', historialCliniciRoutes);
 app.use('/api/veterinarian', require('./routes/veterinarian.routes').default);
 
 app.get("/public", (req: Request, res: Response) => {
